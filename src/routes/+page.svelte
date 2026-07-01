@@ -7,7 +7,6 @@
 	import CalendarDays from '@lucide/svelte/icons/calendar-days';
 	import Disc3 from '@lucide/svelte/icons/disc-3';
 	import MapPin from '@lucide/svelte/icons/map-pin';
-	import Award from '@lucide/svelte/icons/award';
 	import Users from '@lucide/svelte/icons/users';
 	import Sparkles from '@lucide/svelte/icons/sparkles';
 	import Ticket from '@lucide/svelte/icons/ticket';
@@ -17,7 +16,9 @@
 	import Film from '@lucide/svelte/icons/film';
 	import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
 	import ExternalLink from '@lucide/svelte/icons/external-link';
-	import Music2 from '@lucide/svelte/icons/music-2';
+
+	// rotating accent per member so the line-up reads like art, not a roster
+	const accents = ['var(--magenta)', 'var(--cyan)', 'var(--lime)', 'var(--orange)', 'var(--purple)'];
 
 	const bandcamp = links.find((l) => l.label === 'Bandcamp')?.url ?? '#';
 
@@ -29,8 +30,6 @@
 		Instagram: Camera,
 		YouTube: Film
 	};
-
-	const factIcon = [MapPin, Award, Users, Music2];
 
 	// split shows into upcoming / past relative to today
 	const todayISO = new Date().toISOString().slice(0, 10);
@@ -45,13 +44,6 @@
 		{ href: '#musique', label: 'Musique' },
 		{ href: '#live', label: 'Live' },
 		{ href: '#contact', label: 'Contact' }
-	];
-
-	const facts = [
-		{ k: 'Basé à', v: 'Lyon (FR)' },
-		{ k: 'Distinction', v: awards[0] },
-		{ k: 'Le combo', v: '5 musiciens' },
-		{ k: 'Sorties', v: '1 album · 1 EP' }
 	];
 </script>
 
@@ -128,16 +120,10 @@
 	</div>
 
 	<div class="wrap">
-		<div class="facts">
-			{#each facts as f, i (f.k)}
-				{@const Icon = factIcon[i]}
-				<div class="fact reveal" use:reveal={{ delay: i * 90 }}>
-					<Icon class="fact-icon" size={22} />
-					<span class="fact-k">{f.k}</span>
-					<span class="fact-v">{f.v}</span>
-				</div>
-			{/each}
-		</div>
+		<blockquote class="manifesto reveal" use:reveal>
+			On ne joue pas de la musique.<br />
+			On peint des univers sonores <em>encore inexistants</em>.
+		</blockquote>
 	</div>
 </section>
 
@@ -150,15 +136,16 @@
 		</div>
 		<div class="members">
 			{#each members as m, i (m.name)}
-				<article class="member reveal" use:reveal={{ delay: i * 70 }}>
-					<p class="member-role">{m.role}</p>
-					<div class="member-main">
-						<h3 class="member-name">
-							{m.name}
-							{#if m.nick}<span class="member-nick">« {m.nick} »</span>{/if}
-						</h3>
-						<p class="member-blurb">{m.blurb}</p>
-					</div>
+				<article
+					class="member reveal"
+					use:reveal={{ delay: i * 70 }}
+					style="--c:{accents[i % accents.length]}"
+				>
+					<span class="member-role">{m.role}</span>
+					<h3 class="member-name">
+						{m.name}{#if m.nick}<span class="member-nick">“{m.nick}”</span>{/if}
+					</h3>
+					<p class="member-blurb">{m.blurb}</p>
 				</article>
 			{/each}
 		</div>
@@ -348,16 +335,18 @@
 	.hero-title {
 		font-weight: 800;
 		text-transform: uppercase;
-		font-size: clamp(2rem, 9.5vw, 7.5rem);
+		font-size: clamp(1.6rem, 8.4vw, 7rem);
+		letter-spacing: -0.03em;
+		line-height: 0.92;
 		display: flex;
 		flex-direction: column;
-		margin: 0.18em 0 0.4em;
+		gap: 0.02em;
+		margin: 0.18em 0 0.45em;
 		max-width: 100%;
 	}
 	.hero-title span {
 		display: block;
-		max-width: 100%;
-		overflow-wrap: break-word;
+		white-space: nowrap;
 	}
 	.hero-title .l1 {
 		color: var(--ink);
@@ -465,108 +454,80 @@
 		margin-right: 0.4rem;
 	}
 
-	/* ---------- FACTS BENTO ---------- */
-	.facts {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: clamp(0.75rem, 1.6vw, 1.25rem);
-	}
-	.fact {
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-		padding: 1.5rem;
-		border: 1px solid rgba(246, 241, 255, 0.14);
-		border-radius: var(--radius);
-		background: rgba(246, 241, 255, 0.03);
-		transition:
-			transform 0.25s var(--ease),
-			border-color 0.25s var(--ease);
-	}
-	.fact:hover {
-		transform: translateY(-4px);
-		border-color: rgba(182, 255, 26, 0.5);
-	}
-	.fact-k {
-		font-size: 0.72rem;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.16em;
-		color: var(--cyan);
-	}
-	.fact-v {
+	/* ---------- MANIFESTO ---------- */
+	.manifesto {
+		margin: 0;
 		font-family: var(--display);
-		font-weight: 700;
-		font-size: clamp(1.1rem, 2vw, 1.35rem);
-		line-height: 1.15;
+		font-weight: 800;
+		text-transform: uppercase;
+		font-size: clamp(1.7rem, 5.4vw, 4.2rem);
+		line-height: 1.02;
+		letter-spacing: -0.025em;
+		max-width: 18ch;
 	}
-	.fact :global(.fact-icon) {
-		color: var(--lime);
-		margin-bottom: 0.35rem;
+	.manifesto em {
+		font-style: normal;
+		color: transparent;
+		-webkit-text-stroke: 1.5px var(--lime);
 	}
 
 	/* ---------- MEMBERS ---------- */
 	.members {
 		display: grid;
 		gap: 0;
-		margin-top: 2rem;
+		margin-top: 2.4rem;
 		border-top: 1px solid rgba(246, 241, 255, 0.14);
 	}
 	.member {
 		position: relative;
-		display: grid;
-		grid-template-columns: minmax(130px, 190px) 1fr;
-		gap: clamp(1rem, 4vw, 3rem);
-		align-items: baseline;
-		padding: clamp(1.3rem, 3vw, 2rem) 0 clamp(1.3rem, 3vw, 2rem) 1.4rem;
+		padding: clamp(1.4rem, 4vw, 2.8rem) 0;
 		border-bottom: 1px solid rgba(246, 241, 255, 0.14);
-		transition: background 0.25s var(--ease);
-	}
-	.member::before {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 0;
-		bottom: 0;
-		width: 3px;
-		background: var(--magenta);
-		transform: scaleY(0);
-		transform-origin: top;
-		transition: transform 0.3s var(--ease);
-	}
-	.member:hover {
-		background: rgba(246, 241, 255, 0.03);
-	}
-	.member:hover::before {
-		transform: scaleY(1);
+		transition: padding-left 0.35s var(--ease);
 	}
 	.member-role {
+		display: block;
 		text-transform: uppercase;
-		letter-spacing: 0.18em;
-		font-size: 0.78rem;
+		letter-spacing: 0.24em;
+		font-size: 0.74rem;
 		font-weight: 700;
-		color: var(--lime);
-		margin: 0;
+		color: var(--ink-dim);
+		margin-bottom: 0.55rem;
+		transition: color 0.3s var(--ease);
 	}
 	.member-name {
-		font-size: clamp(1.4rem, 4vw, 2.4rem);
-		font-weight: 700;
-		display: inline-flex;
-		flex-wrap: wrap;
-		align-items: baseline;
-		gap: 0.5rem;
-		margin-bottom: 0.5rem;
+		font-family: var(--display);
+		font-weight: 800;
+		text-transform: uppercase;
+		font-size: clamp(2.3rem, 8.5vw, 5.8rem);
+		line-height: 0.92;
+		letter-spacing: -0.03em;
+		color: var(--c);
+		margin: 0 0 0.7rem;
 	}
 	.member-nick {
 		font-family: var(--body);
-		font-size: 0.95rem;
-		color: var(--cyan);
+		font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+		color: var(--ink-dim);
 		font-weight: 500;
+		text-transform: none;
+		letter-spacing: 0;
+		vertical-align: middle;
+		margin-left: 0.4em;
 	}
 	.member-blurb {
 		margin: 0;
 		color: var(--ink-dim);
-		max-width: 52ch;
+		max-width: 54ch;
+	}
+	.member:hover {
+		padding-left: clamp(0.5rem, 2vw, 1.6rem);
+	}
+	.member:hover .member-name {
+		color: transparent;
+		-webkit-text-stroke: 1.6px var(--c);
+	}
+	.member:hover .member-role {
+		color: var(--c);
 	}
 
 	/* ---------- MUSIC ---------- */
@@ -773,22 +734,11 @@
 		.about {
 			grid-template-columns: 1fr;
 		}
-		.facts {
-			grid-template-columns: repeat(2, 1fr);
-		}
 	}
 
 	@media (max-width: 820px) {
 		.nav-links {
 			display: none;
-		}
-		.member {
-			grid-template-columns: 1fr;
-			gap: 0.5rem;
-			align-items: start;
-		}
-		.member-role {
-			order: -1;
 		}
 		.show {
 			grid-template-columns: 1fr auto;
@@ -817,9 +767,6 @@
 	}
 
 	@media (max-width: 520px) {
-		.facts {
-			grid-template-columns: 1fr;
-		}
 		.hero-cta {
 			flex-direction: column;
 			align-items: stretch;
