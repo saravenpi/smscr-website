@@ -29,28 +29,27 @@ export type Member = {
 
 export const members: Member[] = [
 	{
-		name: 'Siméon Peronnet',
+		name: 'Siméon',
 		role: 'Trompette',
 		blurb: 'Les mélodies cuivrées qui percent le mur du son. Membre du trio fondateur.'
 	},
 	{
-		name: 'Gabin Alessio',
+		name: 'Gabin',
 		role: 'Guitare',
 		blurb: 'Riffs anguleux et textures saturées, entre fusion 70s et post-punk.'
 	},
 	{
-		name: 'Timéo Constant',
+		name: 'Timéo',
 		role: 'Basse',
 		blurb: 'La colonne vertébrale groove du groupe, du trio des origines à aujourd’hui.'
 	},
 	{
-		name: 'Fanga Thévenin',
-		nick: 'Fangito',
+		name: 'Fanga',
 		role: 'Batterie',
 		blurb: 'Frappe hyperactive nourrie à la drum & bass. Locomotive rythmique du combo.'
 	},
 	{
-		name: 'Justinien Berthon-Moine',
+		name: 'Justinien',
 		nick: 'Juice',
 		role: 'Claviers',
 		blurb: 'Synthèse analogique et nappes psychédéliques. L’alchimiste des sons neufs.'

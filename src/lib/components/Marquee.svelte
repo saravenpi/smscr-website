@@ -22,18 +22,27 @@
 	.marquee {
 		overflow: hidden;
 		white-space: nowrap;
-		border-block: 2px solid rgba(246, 241, 255, 0.16);
-		padding: 0.5em 0;
+		border-block: 2px solid rgba(246, 241, 255, 0.14);
+		padding: 0.55em 0;
 		background: rgba(10, 4, 16, 0.35);
+		/* fade the edges so text dissolves rather than clips */
+		-webkit-mask-image: linear-gradient(
+			90deg,
+			transparent,
+			#000 8%,
+			#000 92%,
+			transparent
+		);
+		mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 	}
 
 	.track {
 		display: inline-flex;
 		align-items: center;
-		gap: 1.4rem;
-		padding-left: 1.4rem;
+		gap: 1.6rem;
+		padding-left: 1.6rem;
 		will-change: transform;
-		animation: scroll 26s linear infinite;
+		animation: scroll 30s linear infinite;
 	}
 
 	.track.reverse {
@@ -46,6 +55,7 @@
 		font-size: clamp(1.4rem, 4vw, 2.6rem);
 		text-transform: uppercase;
 		letter-spacing: -0.01em;
+		color: color-mix(in srgb, var(--ink) 88%, transparent);
 	}
 
 	.dot {

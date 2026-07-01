@@ -1,12 +1,44 @@
 <script lang="ts">
 	import Marquee from '$lib/components/Marquee.svelte';
+	import { reveal } from '$lib/reveal';
+	import { magnetic } from '$lib/magnetic';
 	import { band, members, releases, shows, links, awards } from '$lib/data';
+	import {
+		Play,
+		CalendarDays,
+		Disc3,
+		MapPin,
+		Award,
+		Users,
+		Sparkles,
+		Ticket,
+		Radio,
+		AudioLines,
+		Camera,
+		Film,
+		ArrowUpRight,
+		ExternalLink,
+		Music2
+	} from '@lucide/svelte';
 
 	const bandcamp = links.find((l) => l.label === 'Bandcamp')?.url ?? '#';
 
+	// icon per streaming/social platform (Lucide dropped brand icons, so these are thematic)
+	const socialIcon: Record<string, typeof Play> = {
+		Bandcamp: Disc3,
+		Spotify: AudioLines,
+		Deezer: Radio,
+		Instagram: Camera,
+		YouTube: Film
+	};
+
+	const factIcon = [MapPin, Award, Users, Music2];
+
 	// split shows into upcoming / past relative to today
 	const todayISO = new Date().toISOString().slice(0, 10);
-	const upcoming = shows.filter((s) => s.date >= todayISO).sort((a, b) => a.date.localeCompare(b.date));
+	const upcoming = shows
+		.filter((s) => s.date >= todayISO)
+		.sort((a, b) => a.date.localeCompare(b.date));
 	const past = shows.filter((s) => s.date < todayISO).sort((a, b) => b.date.localeCompare(a.date));
 
 	const nav = [
@@ -16,37 +48,55 @@
 		{ href: '#live', label: 'Live' },
 		{ href: '#contact', label: 'Contact' }
 	];
+
+	const facts = [
+		{ k: 'Basé à', v: 'Lyon (FR)' },
+		{ k: 'Distinction', v: awards[0] },
+		{ k: 'Le combo', v: '5 musiciens' },
+		{ k: 'Sorties', v: '1 album · 1 EP' }
+	];
 </script>
 
 <header class="nav">
 	<div class="wrap nav-inner">
-		<a class="brand" href="#top">SMSCR<span>✦</span></a>
-		<nav class="nav-links">
+		<a class="brand" href="#top">SMSCR</a>
+		<nav class="nav-links" aria-label="Navigation principale">
 			{#each nav as item (item.href)}
 				<a href={item.href}>{item.label}</a>
 			{/each}
 		</nav>
-		<a class="nav-cta" href={bandcamp} target="_blank" rel="noopener">Écouter</a>
+		<a class="nav-cta" href={bandcamp} target="_blank" rel="noopener" use:magnetic>
+			<Play size={15} strokeWidth={2.5} fill="currentColor" />
+			Écouter
+		</a>
 	</div>
 </header>
 
 <!-- HERO -->
 <section id="top" class="hero">
 	<div class="wrap hero-inner">
-		<p class="eyebrow">{band.city} · {awards[0]}</p>
+		<p class="eyebrow hero-anim" style="--hero-delay:0ms">
+			<MapPin size={13} />{band.city} · {awards[0]}
+		</p>
 		<h1 class="hero-title">
-			<span class="l1">Super</span>
-			<span class="l2">Mega</span>
-			<span class="l3">Super Cool</span>
-			<span class="l4">Révolution</span>
+			<span class="l1 hero-anim" style="--hero-delay:80ms">Super</span>
+			<span class="l2 hero-anim" style="--hero-delay:170ms">Mega</span>
+			<span class="l3 hero-anim" style="--hero-delay:260ms">Super Cool</span>
+			<span class="l4 hero-anim" style="--hero-delay:350ms">Révolution</span>
 		</h1>
-		<p class="hero-tag">{band.tagline}</p>
-		<p class="hero-intro">{band.intro}</p>
-		<div class="hero-cta">
-			<a class="btn btn-primary" href="#musique">Écouter le groupe</a>
-			<a class="btn btn-ghost" href="#live">Voir les dates</a>
+		<p class="hero-tag hero-anim" style="--hero-delay:470ms">{band.tagline}</p>
+		<p class="hero-intro hero-anim" style="--hero-delay:560ms">{band.intro}</p>
+		<div class="hero-cta hero-anim" style="--hero-delay:650ms">
+			<a class="btn btn-primary" href="#musique" use:magnetic>
+				<Play size={18} strokeWidth={2.5} fill="currentColor" />
+				Écouter le groupe
+			</a>
+			<a class="btn btn-ghost" href="#live" use:magnetic>
+				<CalendarDays size={18} />
+				Voir les dates
+			</a>
 		</div>
-		<div class="genres">
+		<div class="genres hero-anim" style="--hero-delay:740ms">
 			{#each band.genres as g (g)}<span class="chip">{g}</span>{/each}
 		</div>
 	</div>
@@ -57,11 +107,11 @@
 <!-- ABOUT -->
 <section id="groupe">
 	<div class="wrap about">
-		<div class="about-head">
-			<p class="eyebrow">Le groupe</p>
+		<div class="about-head reveal" use:reveal>
+			<p class="eyebrow"><Sparkles size={13} />Le groupe</p>
 			<h2 class="section-title">Cinq copains,<br />zéro frontière</h2>
 		</div>
-		<div class="about-body">
+		<div class="about-body reveal" use:reveal={{ delay: 120 }}>
 			<p>
 				Né d'un trio trompette / basse / guitare, le combo s'est mué en quintette électrique
 				avec l'arrivée d'un batteur biberonné à la drum & bass et d'un claviériste féru de
@@ -78,23 +128,37 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="wrap">
+		<div class="facts">
+			{#each facts as f, i (f.k)}
+				{@const Icon = factIcon[i]}
+				<div class="fact reveal" use:reveal={{ delay: i * 90 }}>
+					<Icon class="fact-icon" size={22} />
+					<span class="fact-k">{f.k}</span>
+					<span class="fact-v">{f.v}</span>
+				</div>
+			{/each}
+		</div>
+	</div>
 </section>
 
 <!-- MEMBERS -->
 <section id="membres" class="members-section">
 	<div class="wrap">
-		<p class="eyebrow">Le line-up</p>
-		<h2 class="section-title">Les révolutionnaires</h2>
+		<div class="reveal" use:reveal>
+			<p class="eyebrow"><Users size={13} />Le line-up</p>
+			<h2 class="section-title">Les révolutionnaires</h2>
+		</div>
 		<div class="members">
 			{#each members as m, i (m.name)}
-				<article class="member" style="--i:{i}">
-					<div class="member-index">0{i + 1}</div>
-					<div class="member-body">
+				<article class="member reveal" use:reveal={{ delay: i * 70 }}>
+					<p class="member-role">{m.role}</p>
+					<div class="member-main">
 						<h3 class="member-name">
 							{m.name}
 							{#if m.nick}<span class="member-nick">« {m.nick} »</span>{/if}
 						</h3>
-						<p class="member-role">{m.role}</p>
 						<p class="member-blurb">{m.blurb}</p>
 					</div>
 				</article>
@@ -103,16 +167,22 @@
 	</div>
 </section>
 
-<Marquee items={['NEW EP 2026', "L'INSPECTEUR INSPEKTHER", 'CONTRE LE GANG DES CHATS']} reverse accent="var(--cyan)" />
+<Marquee
+	items={['NEW EP 2026', "L'INSPECTEUR INSPEKTHER", 'CONTRE LE GANG DES CHATS']}
+	reverse
+	accent="var(--cyan)"
+/>
 
 <!-- MUSIC -->
 <section id="musique">
 	<div class="wrap">
-		<p class="eyebrow">Discographie</p>
-		<h2 class="section-title">La musique</h2>
+		<div class="reveal" use:reveal>
+			<p class="eyebrow"><Disc3 size={13} />Discographie</p>
+			<h2 class="section-title">La musique</h2>
+		</div>
 		<div class="releases">
-			{#each releases as r (r.title)}
-				<article class="release">
+			{#each releases as r, i (r.title)}
+				<article class="release reveal" use:reveal={{ delay: i * 100 }}>
 					<div class="release-meta">
 						<span class="release-type">{r.type}</span>
 						<span class="release-year">{r.year}</span>
@@ -127,6 +197,7 @@
 					{/if}
 					{#if r.link}
 						<a class="btn btn-primary sm" href={r.link} target="_blank" rel="noopener">
+							<Disc3 size={16} />
 							Écouter sur Bandcamp
 						</a>
 					{/if}
@@ -139,31 +210,33 @@
 <!-- LIVE -->
 <section id="live" class="live-section">
 	<div class="wrap">
-		<p class="eyebrow">Sur scène</p>
-		<h2 class="section-title">Live</h2>
+		<div class="reveal" use:reveal>
+			<p class="eyebrow"><CalendarDays size={13} />Sur scène</p>
+			<h2 class="section-title">Live</h2>
+		</div>
 
 		{#if upcoming.length}
-			<h3 class="live-sub">À venir</h3>
+			<h3 class="live-sub reveal" use:reveal>À venir</h3>
 			<ul class="shows">
-				{#each upcoming as s (s.date + s.venue)}
-					<li class="show upcoming">
+				{#each upcoming as s, i (s.date + s.venue)}
+					<li class="show upcoming reveal" use:reveal={{ delay: i * 70 }}>
 						<span class="show-date">{s.label}</span>
 						<span class="show-venue">{s.venue}</span>
-						<span class="show-city">{s.city}</span>
-						<span class="show-tag">{s.free ? 'Gratuit' : 'Billetterie'}</span>
+						<span class="show-city"><MapPin size={13} />{s.city}</span>
+						<span class="show-tag"><Ticket size={13} />{s.free ? 'Gratuit' : 'Billetterie'}</span>
 					</li>
 				{/each}
 			</ul>
 		{/if}
 
 		{#if past.length}
-			<h3 class="live-sub muted">Déjà joué</h3>
+			<h3 class="live-sub muted reveal" use:reveal>Déjà joué</h3>
 			<ul class="shows">
-				{#each past as s (s.date + s.venue)}
-					<li class="show">
+				{#each past as s, i (s.date + s.venue)}
+					<li class="show reveal" use:reveal={{ delay: i * 70 }}>
 						<span class="show-date">{s.label}</span>
 						<span class="show-venue">{s.venue}</span>
-						<span class="show-city">{s.city}</span>
+						<span class="show-city"><MapPin size={13} />{s.city}</span>
 						<span class="show-tag past">Archivé</span>
 					</li>
 				{/each}
@@ -175,15 +248,20 @@
 <!-- CONTACT / FOOTER -->
 <footer id="contact">
 	<div class="wrap footer-inner">
-		<div class="footer-cta">
+		<div class="footer-cta reveal" use:reveal>
 			<h2 class="section-title">Suivez la révolution</h2>
 			<div class="socials">
 				{#each links as l (l.url)}
-					<a class="social" href={l.url} target="_blank" rel="noopener">{l.label} <span>↗</span></a>
+					{@const Icon = socialIcon[l.label] ?? ExternalLink}
+					<a class="social" href={l.url} target="_blank" rel="noopener">
+						<Icon size={16} />
+						{l.label}
+						<ArrowUpRight class="social-arrow" size={14} />
+					</a>
 				{/each}
 			</div>
 		</div>
-		<div class="footer-meta">
+		<div class="footer-meta reveal" use:reveal={{ delay: 120 }}>
 			<p class="footer-band">{band.name}</p>
 			<p class="footer-city">{band.city}</p>
 			<p class="footer-legal">
@@ -199,8 +277,8 @@
 		position: sticky;
 		top: 0;
 		z-index: 50;
-		backdrop-filter: blur(12px);
-		background: rgba(10, 4, 16, 0.55);
+		backdrop-filter: blur(14px);
+		background: rgba(10, 4, 16, 0.6);
 		border-bottom: 1px solid rgba(246, 241, 255, 0.1);
 	}
 	.nav-inner {
@@ -208,54 +286,74 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
-		height: 66px;
+		height: 64px;
 	}
 	.brand {
 		font-family: var(--display);
 		font-weight: 800;
 		font-size: 1.5rem;
 		text-decoration: none;
-		letter-spacing: -0.02em;
-	}
-	.brand span {
-		color: var(--magenta);
+		letter-spacing: 0.02em;
 	}
 	.nav-links {
 		display: flex;
-		gap: 1.6rem;
+		gap: clamp(1rem, 2.4vw, 1.8rem);
 	}
 	.nav-links a {
+		position: relative;
 		text-decoration: none;
 		font-size: 0.92rem;
 		font-weight: 500;
 		color: var(--ink-dim);
-		transition: color 0.2s;
+		transition: color 0.2s var(--ease);
+	}
+	.nav-links a::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		bottom: -6px;
+		width: 100%;
+		height: 2px;
+		background: var(--magenta);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.25s var(--ease);
 	}
 	.nav-links a:hover {
 		color: var(--ink);
 	}
+	.nav-links a:hover::after {
+		transform: scaleX(1);
+	}
 	.nav-cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45em;
 		text-decoration: none;
 		font-weight: 700;
 		font-size: 0.9rem;
-		padding: 0.5em 1.1em;
+		padding: 0.5em 1.15em;
 		border-radius: 999px;
 		background: var(--lime);
 		color: #0a0410;
+		transition: transform 0.15s var(--ease);
+	}
+	.nav-cta:hover {
+		transform: translateY(-2px);
 	}
 
 	/* ---------- HERO ---------- */
 	.hero {
-		padding-top: clamp(48px, 8vw, 90px);
-		padding-bottom: clamp(40px, 6vw, 70px);
+		padding-top: clamp(48px, 8vw, 96px);
+		padding-bottom: clamp(40px, 6vw, 72px);
 	}
 	.hero-title {
 		font-weight: 800;
 		text-transform: uppercase;
-		font-size: clamp(3rem, 13vw, 9rem);
+		font-size: clamp(2.7rem, 12.5vw, 9rem);
 		display: flex;
 		flex-direction: column;
-		margin: 0.15em 0 0.35em;
+		margin: 0.18em 0 0.4em;
 	}
 	.hero-title span {
 		display: block;
@@ -265,33 +363,30 @@
 	}
 	.hero-title .l2 {
 		color: var(--magenta);
-		margin-left: 0.6em;
 	}
 	.hero-title .l3 {
 		color: var(--cyan);
 	}
 	.hero-title .l4 {
-		color: var(--lime);
-		margin-left: 0.9em;
 		-webkit-text-stroke: 2px var(--lime);
 		color: transparent;
 	}
 	.hero-tag {
 		font-family: var(--display);
 		font-weight: 700;
-		font-size: clamp(1.1rem, 3vw, 1.7rem);
-		margin: 0 0 0.6em;
+		font-size: clamp(1.15rem, 3vw, 1.8rem);
+		margin: 0 0 0.7em;
 	}
 	.hero-intro {
-		max-width: 620px;
+		max-width: 60ch;
 		color: var(--ink-dim);
-		margin: 0 0 1.6em;
+		margin: 0 0 2rem;
 	}
 	.hero-cta {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.8rem;
-		margin-bottom: 1.8rem;
+		gap: 0.85rem;
+		margin-bottom: 2rem;
 	}
 	.genres {
 		display: flex;
@@ -300,42 +395,57 @@
 	}
 
 	.btn {
-		display: inline-block;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.55em;
 		text-decoration: none;
 		font-weight: 700;
-		padding: 0.75em 1.5em;
+		padding: 0.8em 1.6em;
 		border-radius: 999px;
 		transition:
-			transform 0.15s ease,
-			box-shadow 0.15s ease;
+			transform 0.15s var(--ease),
+			box-shadow 0.15s var(--ease),
+			background 0.2s var(--ease);
 	}
 	.btn.sm {
-		padding: 0.6em 1.2em;
+		padding: 0.65em 1.25em;
 		font-size: 0.9rem;
 	}
 	.btn:hover {
 		transform: translateY(-2px);
+	}
+	.btn:active {
+		transform: translateY(0);
 	}
 	.btn-primary {
 		background: var(--magenta);
 		color: #0a0410;
 		box-shadow: 0 6px 0 rgba(255, 46, 136, 0.35);
 	}
+	.btn-primary:hover {
+		box-shadow: 0 9px 0 rgba(255, 46, 136, 0.3);
+	}
 	.btn-ghost {
 		border: 2px solid rgba(246, 241, 255, 0.4);
 		color: var(--ink);
+	}
+	.btn-ghost:hover {
+		border-color: var(--ink);
 	}
 
 	/* ---------- ABOUT ---------- */
 	.about {
 		display: grid;
-		grid-template-columns: 1fr 1.2fr;
+		grid-template-columns: 1fr 1.25fr;
 		gap: clamp(2rem, 6vw, 5rem);
 		align-items: start;
+		margin-bottom: clamp(3rem, 7vw, 6rem);
 	}
 	.about-body p {
-		margin: 0 0 1.2em;
+		margin: 0 0 1.3em;
 		font-size: 1.1rem;
+		max-width: 62ch;
 	}
 	.about-body strong {
 		color: var(--lime);
@@ -346,7 +456,7 @@
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 0.5rem;
-		margin-top: 1.6rem;
+		margin-top: 1.8rem;
 	}
 	.influences-label {
 		font-weight: 700;
@@ -354,30 +464,88 @@
 		margin-right: 0.4rem;
 	}
 
+	/* ---------- FACTS BENTO ---------- */
+	.facts {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: clamp(0.75rem, 1.6vw, 1.25rem);
+	}
+	.fact {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		padding: 1.5rem;
+		border: 1px solid rgba(246, 241, 255, 0.14);
+		border-radius: var(--radius);
+		background: rgba(246, 241, 255, 0.03);
+		transition:
+			transform 0.25s var(--ease),
+			border-color 0.25s var(--ease);
+	}
+	.fact:hover {
+		transform: translateY(-4px);
+		border-color: rgba(182, 255, 26, 0.5);
+	}
+	.fact-k {
+		font-size: 0.72rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.16em;
+		color: var(--cyan);
+	}
+	.fact-v {
+		font-family: var(--display);
+		font-weight: 700;
+		font-size: clamp(1.1rem, 2vw, 1.35rem);
+		line-height: 1.15;
+	}
+	.fact :global(.fact-icon) {
+		color: var(--lime);
+		margin-bottom: 0.35rem;
+	}
+
 	/* ---------- MEMBERS ---------- */
 	.members {
 		display: grid;
 		gap: 0;
-		margin-top: 1.5rem;
+		margin-top: 2rem;
 		border-top: 1px solid rgba(246, 241, 255, 0.14);
 	}
 	.member {
-		display: flex;
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(130px, 190px) 1fr;
 		gap: clamp(1rem, 4vw, 3rem);
 		align-items: baseline;
-		padding: clamp(1.2rem, 3vw, 2rem) 0;
+		padding: clamp(1.3rem, 3vw, 2rem) 0 clamp(1.3rem, 3vw, 2rem) 1.4rem;
 		border-bottom: 1px solid rgba(246, 241, 255, 0.14);
-		transition: background 0.25s;
+		transition: background 0.25s var(--ease);
+	}
+	.member::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		width: 3px;
+		background: var(--magenta);
+		transform: scaleY(0);
+		transform-origin: top;
+		transition: transform 0.3s var(--ease);
 	}
 	.member:hover {
 		background: rgba(246, 241, 255, 0.03);
 	}
-	.member-index {
-		font-family: var(--display);
-		font-weight: 800;
-		font-size: clamp(1.4rem, 4vw, 2.2rem);
-		color: var(--magenta);
-		min-width: 2.2ch;
+	.member:hover::before {
+		transform: scaleY(1);
+	}
+	.member-role {
+		text-transform: uppercase;
+		letter-spacing: 0.18em;
+		font-size: 0.78rem;
+		font-weight: 700;
+		color: var(--lime);
+		margin: 0;
 	}
 	.member-name {
 		font-size: clamp(1.4rem, 4vw, 2.4rem);
@@ -386,20 +554,13 @@
 		flex-wrap: wrap;
 		align-items: baseline;
 		gap: 0.5rem;
+		margin-bottom: 0.5rem;
 	}
 	.member-nick {
 		font-family: var(--body);
 		font-size: 0.95rem;
 		color: var(--cyan);
 		font-weight: 500;
-	}
-	.member-role {
-		text-transform: uppercase;
-		letter-spacing: 0.18em;
-		font-size: 0.78rem;
-		font-weight: 700;
-		color: var(--lime);
-		margin: 0.5rem 0 0.4rem;
 	}
 	.member-blurb {
 		margin: 0;
@@ -410,15 +571,22 @@
 	/* ---------- MUSIC ---------- */
 	.releases {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 1.4rem;
-		margin-top: 1.5rem;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 1.5rem;
+		margin-top: 2rem;
 	}
 	.release {
 		border: 1px solid rgba(246, 241, 255, 0.16);
 		border-radius: var(--radius);
-		padding: 1.6rem;
+		padding: clamp(1.4rem, 3vw, 2rem);
 		background: linear-gradient(160deg, rgba(139, 47, 255, 0.14), rgba(10, 4, 16, 0.2));
+		transition:
+			transform 0.25s var(--ease),
+			border-color 0.25s var(--ease);
+	}
+	.release:hover {
+		transform: translateY(-4px);
+		border-color: rgba(255, 46, 136, 0.5);
 	}
 	.release-meta {
 		display: flex;
@@ -427,7 +595,7 @@
 		font-size: 0.8rem;
 		text-transform: uppercase;
 		letter-spacing: 0.12em;
-		margin-bottom: 0.8rem;
+		margin-bottom: 1rem;
 	}
 	.release-type {
 		color: var(--magenta);
@@ -436,28 +604,28 @@
 		color: var(--ink-dim);
 	}
 	.release-title {
-		font-size: 1.5rem;
+		font-size: clamp(1.3rem, 2.5vw, 1.6rem);
 		font-weight: 700;
-		margin-bottom: 0.4rem;
+		margin-bottom: 0.5rem;
 	}
 	.release-label {
 		color: var(--cyan);
 		font-size: 0.85rem;
-		margin: 0 0 0.6rem;
+		margin: 0 0 0.7rem;
 	}
 	.release-note {
 		color: var(--ink-dim);
 		font-style: italic;
-		margin: 0 0 0.8rem;
+		margin: 0 0 1rem;
 	}
 	.tracklist {
-		margin: 0.6rem 0 1.2rem;
+		margin: 0.7rem 0 1.4rem;
 		padding-left: 1.4rem;
 		color: var(--ink-dim);
 		font-size: 0.92rem;
 	}
 	.tracklist li {
-		padding: 0.12rem 0;
+		padding: 0.14rem 0;
 	}
 	.tracklist li::marker {
 		color: var(--lime);
@@ -468,8 +636,8 @@
 	.live-sub {
 		font-family: var(--display);
 		font-weight: 700;
-		font-size: 1.3rem;
-		margin: 1.8rem 0 0.6rem;
+		font-size: 1.35rem;
+		margin: 2.2rem 0 0.8rem;
 	}
 	.live-sub.muted {
 		color: var(--ink-dim);
@@ -481,10 +649,10 @@
 	}
 	.show {
 		display: grid;
-		grid-template-columns: 200px 1fr auto auto;
+		grid-template-columns: 210px 1fr auto auto;
 		gap: 1rem;
 		align-items: center;
-		padding: 1.1rem 0.4rem;
+		padding: 1.2rem 0.4rem;
 		border-bottom: 1px solid rgba(246, 241, 255, 0.14);
 	}
 	.show.upcoming {
@@ -499,19 +667,26 @@
 		font-size: 1.05rem;
 	}
 	.show-city {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35em;
 		color: var(--ink-dim);
 		font-size: 0.92rem;
 	}
 	.show-tag {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4em;
 		justify-self: end;
 		font-size: 0.75rem;
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		padding: 0.3em 0.8em;
+		padding: 0.32em 0.85em;
 		border-radius: 999px;
 		background: var(--lime);
 		color: #0a0410;
+		white-space: nowrap;
 	}
 	.show-tag.past {
 		background: transparent;
@@ -522,39 +697,46 @@
 	/* ---------- FOOTER ---------- */
 	footer {
 		border-top: 1px solid rgba(246, 241, 255, 0.14);
-		padding: clamp(56px, 8vw, 96px) 0 48px;
+		padding: clamp(56px, 8vw, 104px) 0 clamp(40px, 5vw, 56px);
 	}
 	.footer-inner {
 		display: grid;
 		grid-template-columns: 1.4fr 1fr;
-		gap: 3rem;
+		gap: clamp(2rem, 5vw, 3rem);
 		align-items: end;
 	}
 	.socials {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.7rem;
-		margin-top: 1.4rem;
+		margin-top: 1.6rem;
 	}
 	.social {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5em;
 		text-decoration: none;
 		font-weight: 700;
-		padding: 0.6em 1.1em;
+		padding: 0.62em 1.15em;
 		border: 1.5px solid rgba(246, 241, 255, 0.3);
 		border-radius: 999px;
 		transition:
-			background 0.2s,
-			color 0.2s;
+			background 0.2s var(--ease),
+			color 0.2s var(--ease),
+			transform 0.2s var(--ease);
 	}
-	.social span {
+	.social :global(.social-arrow) {
 		color: var(--magenta);
+		transition: transform 0.2s var(--ease);
 	}
 	.social:hover {
 		background: var(--ink);
 		color: #0a0410;
+		transform: translateY(-2px);
 	}
-	.social:hover span {
+	.social:hover :global(.social-arrow) {
 		color: #0a0410;
+		transform: translate(2px, -2px);
 	}
 	.footer-meta {
 		text-align: right;
@@ -562,38 +744,65 @@
 	.footer-band {
 		font-family: var(--display);
 		font-weight: 700;
-		font-size: 1.1rem;
+		font-size: 1.15rem;
 		margin: 0;
 	}
 	.footer-city {
 		color: var(--ink-dim);
-		margin: 0.2rem 0;
+		margin: 0.25rem 0;
 	}
 	.footer-legal {
 		color: var(--ink-dim);
 		font-size: 0.82rem;
-		margin-top: 1rem;
+		margin-top: 1.1rem;
+	}
+
+	/* keyboard accessibility */
+	.nav a:focus-visible,
+	.btn:focus-visible,
+	.social:focus-visible,
+	.chip:focus-visible {
+		outline: 2px solid var(--cyan);
+		outline-offset: 3px;
+		border-radius: 6px;
 	}
 
 	/* ---------- RESPONSIVE ---------- */
+	@media (max-width: 1024px) {
+		.about {
+			grid-template-columns: 1fr;
+		}
+		.facts {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
 	@media (max-width: 820px) {
 		.nav-links {
 			display: none;
 		}
-		.about {
+		.member {
 			grid-template-columns: 1fr;
+			gap: 0.5rem;
+			align-items: start;
 		}
-		.hero-title .l2,
-		.hero-title .l4 {
-			margin-left: 0;
+		.member-role {
+			order: -1;
 		}
 		.show {
 			grid-template-columns: 1fr auto;
-			row-gap: 0.3rem;
+			row-gap: 0.35rem;
+			align-items: center;
 		}
-		.show-venue {
+		.show-date {
 			grid-column: 1;
 		}
+		.show-tag {
+			grid-row: 1 / span 2;
+			grid-column: 2;
+			align-self: center;
+		}
+		.show-venue,
 		.show-city {
 			grid-column: 1;
 		}
@@ -603,6 +812,22 @@
 		}
 		.footer-meta {
 			text-align: left;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.facts {
+			grid-template-columns: 1fr;
+		}
+		.hero-cta {
+			flex-direction: column;
+			align-items: stretch;
+		}
+		.hero-cta .btn {
+			text-align: center;
+		}
+		.nav-cta {
+			padding: 0.5em 0.95em;
 		}
 	}
 </style>

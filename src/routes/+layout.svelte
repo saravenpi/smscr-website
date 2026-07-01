@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import { onMount } from 'svelte';
 	import favicon from '$lib/assets/favicon.svg';
 	import { band } from '$lib/data';
 
@@ -7,6 +8,37 @@
 
 	const title = `${band.name} — jazz psychédélique · Lyon`;
 	const description = band.intro;
+
+	// pointer-following spotlight glow (desktop only, motion-safe)
+	onMount(() => {
+		const fine = window.matchMedia('(pointer: fine)').matches;
+		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		if (!fine || reduce) return;
+
+		const el = document.querySelector<HTMLElement>('.spotlight');
+		const root = document.documentElement;
+		let raf = 0;
+		let x = 50;
+		let y = 50;
+
+		const apply = () => {
+			raf = 0;
+			root.style.setProperty('--mx', `${x}%`);
+			root.style.setProperty('--my', `${y}%`);
+			el?.classList.add('active');
+		};
+		const move = (e: PointerEvent) => {
+			x = (e.clientX / window.innerWidth) * 100;
+			y = (e.clientY / window.innerHeight) * 100;
+			if (!raf) raf = requestAnimationFrame(apply);
+		};
+
+		window.addEventListener('pointermove', move, { passive: true });
+		return () => {
+			window.removeEventListener('pointermove', move);
+			cancelAnimationFrame(raf);
+		};
+	});
 </script>
 
 <svelte:head>
@@ -22,6 +54,7 @@
 </svelte:head>
 
 <div class="aurora" aria-hidden="true"></div>
+<div class="spotlight" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 
 {@render children()}
