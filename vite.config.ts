@@ -22,5 +22,11 @@ export default defineConfig({
 				base
 			}
 		})
-	]
+	],
+	ssr: {
+		// @lucide/svelte ships raw .svelte icon files; force Vite to compile them
+		// for SSR (dev + prerender) instead of letting Node import them directly,
+		// which throws "Unknown file extension .svelte".
+		noExternal: ['@lucide/svelte']
+	}
 });

@@ -3,23 +3,21 @@
 	import { reveal } from '$lib/reveal';
 	import { magnetic } from '$lib/magnetic';
 	import { band, members, releases, shows, links, awards } from '$lib/data';
-	import {
-		Play,
-		CalendarDays,
-		Disc3,
-		MapPin,
-		Award,
-		Users,
-		Sparkles,
-		Ticket,
-		Radio,
-		AudioLines,
-		Camera,
-		Film,
-		ArrowUpRight,
-		ExternalLink,
-		Music2
-	} from '@lucide/svelte';
+	import Play from '@lucide/svelte/icons/play';
+	import CalendarDays from '@lucide/svelte/icons/calendar-days';
+	import Disc3 from '@lucide/svelte/icons/disc-3';
+	import MapPin from '@lucide/svelte/icons/map-pin';
+	import Award from '@lucide/svelte/icons/award';
+	import Users from '@lucide/svelte/icons/users';
+	import Sparkles from '@lucide/svelte/icons/sparkles';
+	import Ticket from '@lucide/svelte/icons/ticket';
+	import Radio from '@lucide/svelte/icons/radio';
+	import AudioLines from '@lucide/svelte/icons/audio-lines';
+	import Camera from '@lucide/svelte/icons/camera';
+	import Film from '@lucide/svelte/icons/film';
+	import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
+	import ExternalLink from '@lucide/svelte/icons/external-link';
+	import Music2 from '@lucide/svelte/icons/music-2';
 
 	const bandcamp = links.find((l) => l.label === 'Bandcamp')?.url ?? '#';
 
