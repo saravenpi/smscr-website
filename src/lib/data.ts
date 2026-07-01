@@ -5,19 +5,6 @@
 export const siteUrl = 'https://smscr.fr';
 export const contactEmail = 'contact@smscr.fr';
 
-// Comma-separated keyword hints for the meta keywords tag.
-export const seoKeywords = [
-	'SuperMegaSuperCool Révolution',
-	'SMSCR',
-	'groupe Lyon',
-	'jazz psychédélique',
-	'prog fusion',
-	'jazz fusion',
-	'concert Lyon',
-	'Un Doua Jazz',
-	'musique expérimentale'
-];
-
 export const band = {
 	name: 'SuperMegaSuperCool Révolution',
 	short: 'SMSCR',

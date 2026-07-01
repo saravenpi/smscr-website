@@ -2,8 +2,8 @@ import adapter from '@sveltejs/adapter-static';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
-// When building for GitHub Pages under https://<user>.github.io/<repo>,
-// set BASE_PATH=/<repo> in the environment (the deploy workflow does this).
+// Root-domain hosts (Vercel at smscr.fr) need no base path. Only set BASE_PATH
+// if you ever serve from a sub-path (e.g. https://<user>.github.io/<repo>).
 const base = process.env.BASE_PATH ?? '';
 
 export default defineConfig({

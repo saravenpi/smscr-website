@@ -118,6 +118,25 @@ a {
 	color: inherit;
 }
 
+/* skip-to-content link — visible only when focused via keyboard */
+.skip-link {
+	position: absolute;
+	left: 0.5rem;
+	top: 0.5rem;
+	z-index: 100;
+	transform: translateY(-160%);
+	background: var(--lime);
+	color: #0a0410;
+	font-weight: 700;
+	padding: 0.6em 1em;
+	border-radius: 10px;
+	text-decoration: none;
+	transition: transform 0.2s var(--ease);
+}
+.skip-link:focus {
+	transform: none;
+}
+
 h1,
 h2,
 h3 {

@@ -2,6 +2,8 @@
 	import Marquee from '$lib/components/Marquee.svelte';
 	import { reveal } from '$lib/reveal';
 	import { magnetic } from '$lib/magnetic';
+	import { onMount } from 'svelte';
+	import Instagram from '$lib/components/Instagram.svelte';
 	import { band, members, releases, shows, links, awards } from '$lib/data';
 	import Play from '@lucide/svelte/icons/play';
 	import CalendarDays from '@lucide/svelte/icons/calendar-days';
@@ -12,11 +14,12 @@
 	import Ticket from '@lucide/svelte/icons/ticket';
 	import Radio from '@lucide/svelte/icons/radio';
 	import AudioLines from '@lucide/svelte/icons/audio-lines';
-	import Camera from '@lucide/svelte/icons/camera';
 	import Film from '@lucide/svelte/icons/film';
 	import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
 	import ExternalLink from '@lucide/svelte/icons/external-link';
 	import Mail from '@lucide/svelte/icons/mail';
+	import Menu from '@lucide/svelte/icons/menu';
+	import X from '@lucide/svelte/icons/x';
 
 	// rotating accent per member so the line-up reads like art, not a roster
 	const accents = ['var(--magenta)', 'var(--cyan)', 'var(--lime)', 'var(--orange)', 'var(--purple)'];
@@ -24,21 +27,44 @@
 	const bandcamp = links.find((l) => l.label === 'Bandcamp')?.url ?? '#';
 	const instagram = links.find((l) => l.label === 'Instagram')?.url ?? '#';
 
-	// icon per streaming/social platform (Lucide dropped brand icons, so these are thematic)
-	const socialIcon: Record<string, typeof Play> = {
+	// embed ids parsed from the links list so the on-site players stay in sync with data.ts
+	const spotifyId = links
+		.find((l) => l.label === 'Spotify')
+		?.url.match(/artist\/([A-Za-z0-9]+)/)?.[1];
+	const ytUrl = links.find((l) => l.label === 'YouTube')?.url ?? '';
+	const ytId = ytUrl.match(/[?&]v=([^&]+)/)?.[1] ?? ytUrl.match(/youtu\.be\/([^?]+)/)?.[1];
+
+	// icon per streaming/social platform (Lucide dropped brand icons; Instagram uses our own glyph)
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const socialIcon: Record<string, any> = {
 		Bandcamp: Disc3,
 		Spotify: AudioLines,
 		Deezer: Radio,
-		Instagram: Camera,
+		Instagram,
 		YouTube: Film
 	};
 
-	// split shows into upcoming / past relative to today
-	const todayISO = new Date().toISOString().slice(0, 10);
-	const upcoming = shows
-		.filter((s) => s.date >= todayISO)
-		.sort((a, b) => a.date.localeCompare(b.date));
-	const past = shows.filter((s) => s.date < todayISO).sort((a, b) => b.date.localeCompare(a.date));
+	// Split shows into upcoming / past relative to today. The site is prerendered, so the
+	// build-time value only keeps the static HTML sensible — onMount re-reads the real date
+	// on the client so the split (and the footer year) stay correct between deploys.
+	let todayISO = $state(new Date().toISOString().slice(0, 10));
+	let year = $state(new Date().getFullYear());
+
+	const upcoming = $derived(
+		shows.filter((s) => s.date >= todayISO).sort((a, b) => a.date.localeCompare(b.date))
+	);
+	const past = $derived(
+		shows.filter((s) => s.date < todayISO).sort((a, b) => b.date.localeCompare(a.date))
+	);
+
+	// mobile nav dropdown
+	let menuOpen = $state(false);
+
+	onMount(() => {
+		const now = new Date();
+		todayISO = now.toISOString().slice(0, 10);
+		year = now.getFullYear();
+	});
 
 	const nav = [
 		{ href: '#groupe', label: 'Le groupe' },
@@ -49,12 +75,19 @@
 	];
 </script>
 
+<a class="skip-link" href="#top">Aller au contenu</a>
+
 <header class="nav">
 	<div class="wrap nav-inner">
-		<a class="brand" href="#top">SMSCR</a>
-		<nav class="nav-links" aria-label="Navigation principale">
+		<a class="brand" href="#top" onclick={() => (menuOpen = false)}>SMSCR</a>
+		<nav
+			id="primary-nav"
+			class="nav-links"
+			class:open={menuOpen}
+			aria-label="Navigation principale"
+		>
 			{#each nav as item (item.href)}
-				<a href={item.href}>{item.label}</a>
+				<a href={item.href} onclick={() => (menuOpen = false)}>{item.label}</a>
 			{/each}
 		</nav>
 		<div class="nav-actions">
@@ -66,32 +99,28 @@
 				aria-label="Instagram @supermegasupercoolrevolution"
 				title="@supermegasupercoolrevolution"
 			>
-				<svg
-					width="20"
-					height="20"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					aria-hidden="true"
-				>
-					<rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-					<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-					<line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-				</svg>
+				<Instagram size={20} />
 			</a>
 			<a class="nav-cta" href={bandcamp} target="_blank" rel="noopener" use:magnetic>
 				<Play size={15} strokeWidth={2.5} fill="currentColor" />
 				Écouter
 			</a>
+			<button
+				type="button"
+				class="nav-toggle"
+				aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+				aria-expanded={menuOpen}
+				aria-controls="primary-nav"
+				onclick={() => (menuOpen = !menuOpen)}
+			>
+				{#if menuOpen}<X size={22} />{:else}<Menu size={22} />{/if}
+			</button>
 		</div>
 	</div>
 </header>
 
 <!-- HERO -->
-<section id="top" class="hero">
+<section id="top" class="hero" tabindex="-1">
 	<div class="wrap hero-inner">
 		<p class="eyebrow hero-anim" style="--hero-delay:0ms">
 			<MapPin size={13} />{band.city} · {awards[0]}
@@ -195,6 +224,31 @@
 			<p class="eyebrow"><Disc3 size={13} />Discographie</p>
 			<h2 class="section-title">La musique</h2>
 		</div>
+		{#if spotifyId || ytId}
+			<div class="players reveal" use:reveal={{ delay: 80 }}>
+				{#if spotifyId}
+					<iframe
+						class="player player-spotify"
+						title="{band.name} sur Spotify"
+						src="https://open.spotify.com/embed/artist/{spotifyId}?theme=0"
+						loading="lazy"
+						allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+						allowfullscreen
+					></iframe>
+				{/if}
+				{#if ytId}
+					<div class="player player-video">
+						<iframe
+							title="{band.name} sur YouTube"
+							src="https://www.youtube-nocookie.com/embed/{ytId}"
+							loading="lazy"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen
+						></iframe>
+					</div>
+				{/if}
+			</div>
+		{/if}
 		<div class="releases">
 			{#each releases as r, i (r.title)}
 				<article class="release reveal" use:reveal={{ delay: i * 100 }}>
@@ -285,7 +339,7 @@
 			<p class="footer-city">{band.city}</p>
 			<p class="footer-thanks">Merci à Antonio Di Giovanesco.</p>
 			<p class="footer-legal">
-				© {new Date().getFullYear()} SMSCR — Site fait avec ✦ et beaucoup de fusion.
+				© {year} SMSCR — Site fait avec ✦ et beaucoup de fusion.
 			</p>
 		</div>
 	</div>
@@ -385,11 +439,34 @@
 	.nav-cta:hover {
 		transform: translateY(-2px);
 	}
+	.nav-toggle {
+		display: none;
+		align-items: center;
+		justify-content: center;
+		width: 38px;
+		height: 38px;
+		border-radius: 999px;
+		background: transparent;
+		color: var(--ink);
+		border: 1.5px solid rgba(246, 241, 255, 0.28);
+		cursor: pointer;
+		transition:
+			color 0.2s var(--ease),
+			border-color 0.2s var(--ease);
+	}
+	.nav-toggle:hover {
+		color: var(--magenta);
+		border-color: var(--magenta);
+	}
 
 	/* ---------- HERO ---------- */
 	.hero {
 		padding-top: clamp(48px, 8vw, 96px);
 		padding-bottom: clamp(40px, 6vw, 72px);
+	}
+	/* skip-link target: focusable region, but no ring around the whole section */
+	.hero:focus {
+		outline: none;
 	}
 	.hero-title {
 		font-weight: 800;
@@ -588,6 +665,33 @@
 	}
 
 	/* ---------- MUSIC ---------- */
+	.players {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 1.5rem;
+		margin: 2rem 0 2.6rem;
+		align-items: start;
+	}
+	.player {
+		width: 100%;
+		border: 0;
+		border-radius: var(--radius);
+	}
+	.player-spotify {
+		height: 352px;
+	}
+	.player-video {
+		position: relative;
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+	}
+	.player-video iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
 	.releases {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -823,8 +927,35 @@
 	}
 
 	@media (max-width: 820px) {
+		.nav-toggle {
+			display: inline-flex;
+		}
 		.nav-links {
-			display: none;
+			position: absolute;
+			top: 64px;
+			left: 0;
+			right: 0;
+			flex-direction: column;
+			gap: 0.4rem;
+			padding: 0.8rem var(--gutter) 1.2rem;
+			background: rgba(10, 4, 16, 0.96);
+			backdrop-filter: blur(14px);
+			border-bottom: 1px solid rgba(246, 241, 255, 0.12);
+			transform: translateY(-8px);
+			opacity: 0;
+			pointer-events: none;
+			transition:
+				opacity 0.2s var(--ease),
+				transform 0.2s var(--ease);
+		}
+		.nav-links.open {
+			opacity: 1;
+			transform: none;
+			pointer-events: auto;
+		}
+		.nav-links a {
+			padding: 0.55rem 0;
+			font-size: 1.05rem;
 		}
 		.show {
 			grid-template-columns: 1fr auto;

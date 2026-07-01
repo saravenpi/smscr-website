@@ -4,7 +4,7 @@
 	import { dev } from '$app/environment';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import favicon from '$lib/assets/favicon.svg';
-	import { band, members, links, awards, siteUrl, contactEmail, seoKeywords } from '$lib/data';
+	import { band, members, releases, shows, links, awards, siteUrl, contactEmail } from '$lib/data';
 
 	let { children } = $props();
 
@@ -16,10 +16,18 @@
 	const canonical = `${siteUrl}/`;
 	const ogImage = `${siteUrl}/og.png`;
 
-	// Structured data for rich results (schema.org MusicGroup)
-	const jsonLd = JSON.stringify({
-		'@context': 'https://schema.org',
+	// Structured data (schema.org @graph): the band + its discography + its gigs.
+	const bandId = `${canonical}#band`;
+
+	const albumReleaseType: Record<string, string> = {
+		Album: 'https://schema.org/AlbumRelease',
+		EP: 'https://schema.org/EPRelease',
+		Single: 'https://schema.org/SingleRelease'
+	};
+
+	const bandNode = {
 		'@type': 'MusicGroup',
+		'@id': bandId,
 		name: band.name,
 		alternateName: band.short,
 		url: canonical,
@@ -30,7 +38,43 @@
 		foundingLocation: { '@type': 'Place', name: band.city },
 		award: awards[0],
 		member: members.map((m) => ({ '@type': 'Person', name: m.name })),
-		sameAs: links.map((l) => l.url)
+		sameAs: links.map((l) => l.url),
+		album: releases.map((r) => ({
+			'@type': 'MusicAlbum',
+			name: r.title,
+			datePublished: r.year,
+			albumReleaseType: albumReleaseType[r.type],
+			byArtist: { '@id': bandId },
+			...(r.link ? { url: r.link } : {}),
+			...(r.tracks
+				? {
+						numTracks: r.tracks.length,
+						track: r.tracks.map((t, i) => ({
+							'@type': 'MusicRecording',
+							position: i + 1,
+							name: t
+						}))
+					}
+				: {})
+		}))
+	};
+
+	// One MusicEvent per gig so Google can surface them as event rich results.
+	const eventNodes = shows.map((s) => ({
+		'@type': 'MusicEvent',
+		name: `${band.name} · ${s.venue}`,
+		startDate: s.date,
+		eventStatus: 'https://schema.org/EventScheduled',
+		eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+		location: { '@type': 'Place', name: s.venue, address: s.city },
+		performer: { '@id': bandId },
+		url: s.link ?? canonical,
+		...(s.free ? { isAccessibleForFree: true } : {})
+	}));
+
+	const jsonLd = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@graph': [bandNode, ...eventNodes]
 	});
 
 	// pointer-following spotlight glow (desktop only, motion-safe)
@@ -72,7 +116,6 @@
 
 	<title>{title}</title>
 	<meta name="description" content={description} />
-	<meta name="keywords" content={seoKeywords.join(', ')} />
 	<meta name="author" content={band.name} />
 	<meta name="robots" content="index, follow, max-image-preview:large" />
 	<meta name="theme-color" content="#0a0410" />

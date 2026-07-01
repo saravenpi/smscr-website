@@ -37,12 +37,12 @@ npm run preview  # prévisualiser le build
 
 ## Déploiement
 
-Un workflow GitHub Actions (`.github/workflows/deploy.yml`) construit et publie
-automatiquement le site sur **GitHub Pages** à chaque push sur `main`. Le build
-utilise la variable `BASE_PATH=/<repo>` pour servir le site depuis
-`https://<user>.github.io/<repo>`.
+Le site est un bundle statique (`@sveltejs/adapter-static`, `prerender = true`)
+déployé sur **Vercel** (config dans `vercel.json`). Chaque push sur `main`
+déclenche un build (`npm run build` → `./build`) et une mise en ligne automatique.
 
-Pour activer : **Settings → Pages → Source → GitHub Actions**.
+Le domaine canonique est `https://smscr.fr` (défini par `siteUrl` dans
+`src/lib/data.ts`) — toutes les URL SEO/OG en dépendent.
 
 ---
 
