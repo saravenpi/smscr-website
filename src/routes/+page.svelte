@@ -348,13 +348,16 @@
 	.hero-title {
 		font-weight: 800;
 		text-transform: uppercase;
-		font-size: clamp(2.7rem, 12.5vw, 9rem);
+		font-size: clamp(2rem, 9.5vw, 7.5rem);
 		display: flex;
 		flex-direction: column;
 		margin: 0.18em 0 0.4em;
+		max-width: 100%;
 	}
 	.hero-title span {
 		display: block;
+		max-width: 100%;
+		overflow-wrap: break-word;
 	}
 	.hero-title .l1 {
 		color: var(--ink);
