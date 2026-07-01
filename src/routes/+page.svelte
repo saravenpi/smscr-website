@@ -16,6 +16,7 @@
 	import Film from '@lucide/svelte/icons/film';
 	import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
 	import ExternalLink from '@lucide/svelte/icons/external-link';
+	import Mail from '@lucide/svelte/icons/mail';
 
 	// rotating accent per member so the line-up reads like art, not a roster
 	const accents = ['var(--magenta)', 'var(--cyan)', 'var(--lime)', 'var(--orange)', 'var(--purple)'];
@@ -272,10 +273,15 @@
 					</a>
 				{/each}
 			</div>
+			<a class="footer-mail" href="mailto:contact@smscr.fr">
+				<Mail size={18} />
+				contact@smscr.fr
+			</a>
 		</div>
 		<div class="footer-meta reveal" use:reveal={{ delay: 120 }}>
 			<p class="footer-band">{band.name}</p>
 			<p class="footer-city">{band.city}</p>
+			<p class="footer-thanks">Merci à Antonio Di Giovanesco.</p>
 			<p class="footer-legal">
 				© {new Date().getFullYear()} SMSCR — Site fait avec ✦ et beaucoup de fusion.
 			</p>
@@ -746,8 +752,36 @@
 		color: #0a0410;
 		transform: translate(2px, -2px);
 	}
+	.footer-mail {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55em;
+		margin-top: 1.3rem;
+		font-family: var(--display);
+		font-weight: 700;
+		font-size: clamp(1.15rem, 2.6vw, 1.6rem);
+		text-decoration: none;
+		color: var(--ink);
+		width: fit-content;
+		border-bottom: 2px solid transparent;
+		transition:
+			color 0.2s var(--ease),
+			border-color 0.2s var(--ease);
+	}
+	.footer-mail :global(svg) {
+		color: var(--magenta);
+	}
+	.footer-mail:hover {
+		color: var(--magenta);
+		border-color: var(--magenta);
+	}
 	.footer-meta {
 		text-align: right;
+	}
+	.footer-thanks {
+		color: var(--ink-dim);
+		font-size: 0.88rem;
+		margin: 0 0 0.2rem;
 	}
 	.footer-band {
 		font-family: var(--display);

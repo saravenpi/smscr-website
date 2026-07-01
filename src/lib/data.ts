@@ -50,7 +50,6 @@ export const members: Member[] = [
 	},
 	{
 		name: 'Justinien',
-		nick: 'Juice',
 		role: 'Claviers',
 		blurb: 'Synthèse analogique et nappes psychédéliques. L’alchimiste des sons neufs.'
 	}
