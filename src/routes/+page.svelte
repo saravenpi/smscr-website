@@ -394,7 +394,7 @@
 	.hero-title {
 		font-weight: 800;
 		text-transform: uppercase;
-		font-size: clamp(1.6rem, 8.4vw, 7rem);
+		font-size: clamp(1.5rem, 7vw, 7rem);
 		letter-spacing: -0.03em;
 		line-height: 0.92;
 		display: flex;
