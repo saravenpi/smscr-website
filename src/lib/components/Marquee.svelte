@@ -6,7 +6,7 @@
 	}: { items: string[]; reverse?: boolean; accent?: string } = $props();
 
 	// duplicate the content so the scroll loops seamlessly
-	const loop = [...items, ...items];
+	const loop = $derived([...items, ...items]);
 </script>
 
 <div class="marquee" style="--accent:{accent}">

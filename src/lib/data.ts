@@ -71,7 +71,8 @@ export const releases: Release[] = [
 		title: 'Les Aventures de l’Inspecteur Inspekther Contre le Gang des Chats',
 		type: 'EP',
 		year: '2026',
-		note: 'Le film noir le plus funky de l’année.'
+		note: 'Le film noir le plus funky de l’année.',
+		link: 'https://supermegasupercoolrevolution.bandcamp.com'
 	},
 	{
 		title: 'À l’aise avec SuperMegaSuperCool Révolution',

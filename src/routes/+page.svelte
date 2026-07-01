@@ -358,8 +358,7 @@
 		color: var(--cyan);
 	}
 	.hero-title .l4 {
-		-webkit-text-stroke: 2px var(--lime);
-		color: transparent;
+		color: var(--lime);
 	}
 	.hero-tag {
 		font-family: var(--display);
@@ -467,8 +466,7 @@
 	}
 	.manifesto em {
 		font-style: normal;
-		color: transparent;
-		-webkit-text-stroke: 1.5px var(--lime);
+		color: var(--lime);
 	}
 
 	/* ---------- MEMBERS ---------- */
@@ -522,10 +520,6 @@
 	.member:hover {
 		padding-left: clamp(0.5rem, 2vw, 1.6rem);
 	}
-	.member:hover .member-name {
-		color: transparent;
-		-webkit-text-stroke: 1.6px var(--c);
-	}
 	.member:hover .member-role {
 		color: var(--c);
 	}
@@ -534,6 +528,7 @@
 	.releases {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		align-items: start;
 		gap: 1.5rem;
 		margin-top: 2rem;
 	}
