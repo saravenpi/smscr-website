@@ -1,10 +1,15 @@
 <script lang="ts">
 	import '../app.css';
 	import { onMount } from 'svelte';
+	import { dev } from '$app/environment';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import favicon from '$lib/assets/favicon.svg';
 	import { band } from '$lib/data';
 
 	let { children } = $props();
+
+	// Vercel Web Analytics
+	injectAnalytics({ mode: dev ? 'development' : 'production' });
 
 	const title = `${band.name} — jazz psychédélique · Lyon`;
 	const description = band.intro;
