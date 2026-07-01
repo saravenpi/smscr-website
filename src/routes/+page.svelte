@@ -97,8 +97,10 @@
 			<MapPin size={13} />{band.city} · {awards[0]}
 		</p>
 		<h1 class="hero-title">
-			<span class="l1 hero-anim" style="--hero-delay:80ms">Super</span>
-			<span class="l2 hero-anim" style="--hero-delay:170ms">Mega</span>
+			<span class="hline">
+				<span class="l1 hero-anim" style="--hero-delay:80ms">Super</span>
+				<span class="l2 hero-anim" style="--hero-delay:170ms">Mega</span>
+			</span>
 			<span class="l3 hero-anim" style="--hero-delay:260ms">Super Cool</span>
 			<span class="l4 hero-anim" style="--hero-delay:350ms">Révolution</span>
 		</h1>
@@ -404,6 +406,10 @@
 	.hero-title span {
 		display: block;
 		white-space: nowrap;
+	}
+	.hero-title .hline {
+		display: flex;
+		gap: 0.3em;
 	}
 	.hero-title .l1 {
 		color: var(--ink);
