@@ -21,6 +21,7 @@
 	const accents = ['var(--magenta)', 'var(--cyan)', 'var(--lime)', 'var(--orange)', 'var(--purple)'];
 
 	const bandcamp = links.find((l) => l.label === 'Bandcamp')?.url ?? '#';
+	const instagram = links.find((l) => l.label === 'Instagram')?.url ?? '#';
 
 	// icon per streaming/social platform (Lucide dropped brand icons, so these are thematic)
 	const socialIcon: Record<string, typeof Play> = {
@@ -55,10 +56,36 @@
 				<a href={item.href}>{item.label}</a>
 			{/each}
 		</nav>
-		<a class="nav-cta" href={bandcamp} target="_blank" rel="noopener" use:magnetic>
-			<Play size={15} strokeWidth={2.5} fill="currentColor" />
-			Écouter
-		</a>
+		<div class="nav-actions">
+			<a
+				class="nav-ig"
+				href={instagram}
+				target="_blank"
+				rel="noopener"
+				aria-label="Instagram @supermegasupercoolrevolution"
+				title="@supermegasupercoolrevolution"
+			>
+				<svg
+					width="20"
+					height="20"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+					<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+					<line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+				</svg>
+			</a>
+			<a class="nav-cta" href={bandcamp} target="_blank" rel="noopener" use:magnetic>
+				<Play size={15} strokeWidth={2.5} fill="currentColor" />
+				Écouter
+			</a>
+		</div>
 	</div>
 </header>
 
@@ -309,6 +336,30 @@
 	}
 	.nav-links a:hover::after {
 		transform: scaleX(1);
+	}
+	.nav-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+	}
+	.nav-ig {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 38px;
+		height: 38px;
+		border-radius: 999px;
+		color: var(--ink);
+		border: 1.5px solid rgba(246, 241, 255, 0.28);
+		transition:
+			color 0.2s var(--ease),
+			border-color 0.2s var(--ease),
+			transform 0.15s var(--ease);
+	}
+	.nav-ig:hover {
+		color: var(--magenta);
+		border-color: var(--magenta);
+		transform: translateY(-2px);
 	}
 	.nav-cta {
 		display: inline-flex;
