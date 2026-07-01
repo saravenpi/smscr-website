@@ -1,6 +1,10 @@
 // Band data for SuperMegaSuperCool Révolution (SMSCR).
 // Sourced from the band's Bandcamp, Nébuleuse Sonore, Spotify & Deezer pages.
 
+// Release artwork, extracted from the album files and optimised for the web.
+import inspektherCover from './assets/covers/inspekther.jpg';
+import alaiseCover from './assets/covers/alaise.jpg';
+
 // Canonical site origin (no trailing slash) — used for SEO absolute URLs.
 export const siteUrl = 'https://smscr.fr';
 export const contactEmail = 'contact@smscr.fr';
@@ -67,6 +71,7 @@ export type Release = {
 	note?: string;
 	tracks?: string[];
 	link?: string;
+	cover?: string;
 };
 
 export const releases: Release[] = [
@@ -74,6 +79,7 @@ export const releases: Release[] = [
 		title: 'Les Aventures de l’Inspecteur Inspekther Contre le Gang des Chats',
 		type: 'EP',
 		year: '2026',
+		cover: inspektherCover,
 		note: 'Le film noir le plus funky de l’année.',
 		link: 'https://supermegasupercoolrevolution.bandcamp.com'
 	},
@@ -81,6 +87,7 @@ export const releases: Release[] = [
 		title: 'À l’aise avec SuperMegaSuperCool Révolution',
 		type: 'Album',
 		year: '2024',
+		cover: alaiseCover,
 		label: 'Rhone X',
 		tracks: [
 			'Prelude (ft. Emmanuelle Saby)',

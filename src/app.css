@@ -202,6 +202,10 @@ section {
 	font-size: clamp(2.3rem, 6vw, 4.4rem);
 	font-weight: 800;
 	margin: 0 0 1.4rem;
+	/* long words like « révolutionnaires » must wrap/hyphenate on narrow screens
+	   instead of overflowing (body has overflow-x: clip, so they'd get cut off) */
+	overflow-wrap: break-word;
+	hyphens: auto;
 }
 
 /* ---------- scroll reveal ---------- */

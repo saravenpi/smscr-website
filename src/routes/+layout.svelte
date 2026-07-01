@@ -14,7 +14,7 @@
 	const title = `${band.name} (SMSCR) — jazz psychédélique · Lyon`;
 	const description = band.intro;
 	const canonical = `${siteUrl}/`;
-	const ogImage = `${siteUrl}/og.png`;
+	const ogImage = `${siteUrl}/og.jpg`;
 
 	// Structured data (schema.org @graph): the band + its discography + its gigs.
 	const bandId = `${canonical}#band`;

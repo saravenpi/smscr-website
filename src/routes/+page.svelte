@@ -252,6 +252,16 @@
 		<div class="releases">
 			{#each releases as r, i (r.title)}
 				<article class="release reveal" use:reveal={{ delay: i * 100 }}>
+					{#if r.cover}
+						<img
+							class="release-cover"
+							src={r.cover}
+							alt="Pochette de « {r.title} »"
+							loading="lazy"
+							width="700"
+							height="700"
+						/>
+					{/if}
 					<div class="release-meta">
 						<span class="release-type">{r.type}</span>
 						<span class="release-year">{r.year}</span>
@@ -711,6 +721,14 @@
 	.release:hover {
 		transform: translateY(-4px);
 		border-color: rgba(255, 46, 136, 0.5);
+	}
+	.release-cover {
+		display: block;
+		width: 100%;
+		aspect-ratio: 1 / 1;
+		object-fit: cover;
+		border-radius: calc(var(--radius) - 6px);
+		margin-bottom: 1.1rem;
 	}
 	.release-meta {
 		display: flex;
