@@ -2,12 +2,14 @@
 // Sourced from the band's Bandcamp, Nébuleuse Sonore, Spotify & Deezer pages.
 
 // Release artwork, extracted from the album files and optimised for the web.
-import inspektherCover from './assets/covers/inspekther.jpg';
-import alaiseCover from './assets/covers/alaise.jpg';
-import fullShineRenderCover from './assets/covers/full-shine-render.jpg';
-import laFangabinadeCover from './assets/covers/la-fangabinade.jpg';
-import laFangratitudeCover from './assets/covers/la-fangratitude.jpg';
-import westernVilleurbanneCover from './assets/covers/western-villeurbanne.jpg';
+// `?enhanced` yields a Picture object (responsive AVIF/WebP) for <enhanced:img>.
+import type { Picture } from '@sveltejs/enhanced-img';
+import inspektherCover from './assets/covers/inspekther.jpg?enhanced';
+import alaiseCover from './assets/covers/alaise.jpg?enhanced';
+import fullShineRenderCover from './assets/covers/full-shine-render.jpg?enhanced';
+import laFangabinadeCover from './assets/covers/la-fangabinade.jpg?enhanced';
+import laFangratitudeCover from './assets/covers/la-fangratitude.jpg?enhanced';
+import westernVilleurbanneCover from './assets/covers/western-villeurbanne.jpg?enhanced';
 
 // Canonical site origin (no trailing slash) — used for SEO absolute URLs.
 export const siteUrl = 'https://smscr.fr';
@@ -86,7 +88,7 @@ export type Release = {
 	note?: string;
 	tracks?: string[];
 	link?: string;
-	cover?: string;
+	cover?: Picture;
 };
 
 export const releases: Release[] = [

@@ -48,13 +48,12 @@
 			{#each releases as r, i (r.title)}
 				<article class="release card reveal" use:reveal={{ delay: i * 100 }}>
 					{#if r.cover}
-						<img
+						<enhanced:img
 							class="release-cover"
 							src={r.cover}
 							alt="Pochette de « {r.title} »"
+							sizes="auto"
 							loading="lazy"
-							width="700"
-							height="700"
 						/>
 					{/if}
 					<div class="release-meta">
