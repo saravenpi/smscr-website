@@ -116,6 +116,37 @@ export type Show = {
 // Ordered chronologically. `date` used to split upcoming vs. past.
 export const shows: Show[] = [
 	{
+		date: '2026-02-02',
+		label: '2 février 2026',
+		venue: 'Saint-Fons Jazz Festival',
+		city: 'Saint-Fons (69)'
+	},
+	{
+		date: '2026-02-10',
+		label: '10 février 2026',
+		venue: 'Le Périscope',
+		city: 'Lyon (69)'
+	},
+	{
+		date: '2026-04-03',
+		label: '3 avril 2026',
+		venue: 'La Marbrerie',
+		city: 'Montreuil (93)'
+	},
+	{
+		date: '2026-05-21',
+		label: '21–22 mai 2026',
+		venue: 'FIMU',
+		city: 'Belfort (90)',
+		free: true
+	},
+	{
+		date: '2026-05-24',
+		label: '24 mai 2026',
+		venue: "24h de l'INSA",
+		city: 'Villeurbanne (69)'
+	},
+	{
 		date: '2026-07-11',
 		label: '11 juillet 2026',
 		venue: 'Jazz à Vienne',
@@ -123,10 +154,10 @@ export const shows: Show[] = [
 		free: true
 	},
 	{
-		date: '2026-04-03',
-		label: '3 avril 2026',
-		venue: 'La Marbrerie',
-		city: 'Montreuil (93)'
+		date: '2026-07-17',
+		label: '17 juillet 2026',
+		venue: 'La Grange Merveilleuse',
+		city: 'La Chapelle-Naude (71)'
 	}
 ];
 
