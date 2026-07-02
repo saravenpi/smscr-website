@@ -2,13 +2,11 @@
 	import { base } from '$app/paths';
 	import { magnetic } from '$lib/magnetic';
 	import { links } from '$lib/data';
-	import Instagram from '$lib/components/Instagram.svelte';
 	import Play from '@lucide/svelte/icons/play';
 	import Menu from '@lucide/svelte/icons/menu';
 	import X from '@lucide/svelte/icons/x';
 
 	const bandcamp = links.find((l) => l.label === 'Bandcamp')?.url ?? '#';
-	const instagram = links.find((l) => l.label === 'Instagram')?.url ?? '#';
 
 	// Absolute (home-anchored) links so the nav works identically on every route.
 	const nav = [
@@ -32,16 +30,6 @@
 			{/each}
 		</nav>
 		<div class="nav-actions">
-			<a
-				class="nav-ig"
-				href={instagram}
-				target="_blank"
-				rel="noopener"
-				aria-label="Instagram @supermegasupercoolrevolution"
-				title="@supermegasupercoolrevolution"
-			>
-				<Instagram size={20} />
-			</a>
 			<a class="nav-cta" href={bandcamp} target="_blank" rel="noopener" use:magnetic>
 				<Play size={15} strokeWidth={2.5} fill="currentColor" />
 				Écouter
@@ -117,25 +105,6 @@
 		display: flex;
 		align-items: center;
 		gap: 0.6rem;
-	}
-	.nav-ig {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 38px;
-		height: 38px;
-		border-radius: 999px;
-		color: var(--ink);
-		border: 1.5px solid rgba(246, 241, 255, 0.28);
-		transition:
-			color 0.2s var(--ease),
-			border-color 0.2s var(--ease),
-			transform 0.15s var(--ease);
-	}
-	.nav-ig:hover {
-		color: var(--magenta);
-		border-color: var(--magenta);
-		transform: translateY(-2px);
 	}
 	.nav-cta {
 		display: inline-flex;
