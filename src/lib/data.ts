@@ -90,8 +90,8 @@ export const releases: Release[] = [
 		type: 'EP',
 		year: '2026',
 		cover: inspektherCover,
-		note: 'Le film noir le plus funky de l’année. Bientôt disponible.'
-		// No `link` yet — the EP isn't on Bandcamp, so no "Écouter" button is shown.
+		note: 'Le film noir le plus funky de l’année.',
+		link: 'https://supermegasupercoolrevolution.bandcamp.com/album/les-aventures-de-linspecteur-inspekther-contre-le-gang-des-chats'
 	},
 	{
 		title: 'À l’aise avec SuperMegaSuperCool Révolution',
