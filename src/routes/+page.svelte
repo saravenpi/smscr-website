@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import Marquee from '$lib/components/Marquee.svelte';
+	import Nav from '$lib/components/Nav.svelte';
+	import Footer from '$lib/components/Footer.svelte';
+	import Shows from '$lib/components/Shows.svelte';
 	import { reveal } from '$lib/reveal';
 	import { magnetic } from '$lib/magnetic';
-	import { onMount } from 'svelte';
-	import Instagram from '$lib/components/Instagram.svelte';
 	import bandPhoto from '$lib/assets/band.jpg';
 	import { band, members, releases, shows, links, awards } from '$lib/data';
 	import Play from '@lucide/svelte/icons/play';
@@ -12,21 +14,10 @@
 	import MapPin from '@lucide/svelte/icons/map-pin';
 	import Users from '@lucide/svelte/icons/users';
 	import Sparkles from '@lucide/svelte/icons/sparkles';
-	import Ticket from '@lucide/svelte/icons/ticket';
-	import Radio from '@lucide/svelte/icons/radio';
-	import AudioLines from '@lucide/svelte/icons/audio-lines';
-	import Film from '@lucide/svelte/icons/film';
-	import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
-	import ExternalLink from '@lucide/svelte/icons/external-link';
-	import Mail from '@lucide/svelte/icons/mail';
-	import Menu from '@lucide/svelte/icons/menu';
-	import X from '@lucide/svelte/icons/x';
+	import Award from '@lucide/svelte/icons/award';
 
 	// rotating accent per member so the line-up reads like art, not a roster
 	const accents = ['var(--magenta)', 'var(--cyan)', 'var(--lime)', 'var(--orange)', 'var(--purple)'];
-
-	const bandcamp = links.find((l) => l.label === 'Bandcamp')?.url ?? '#';
-	const instagram = links.find((l) => l.label === 'Instagram')?.url ?? '#';
 
 	// embed ids parsed from the links list so the on-site players stay in sync with data.ts
 	const spotifyId = links
@@ -34,91 +25,11 @@
 		?.url.match(/artist\/([A-Za-z0-9]+)/)?.[1];
 	const ytUrl = links.find((l) => l.label === 'YouTube')?.url ?? '';
 	const ytId = ytUrl.match(/[?&]v=([^&]+)/)?.[1] ?? ytUrl.match(/youtu\.be\/([^?]+)/)?.[1];
-
-	// icon per streaming/social platform (Lucide dropped brand icons; Instagram uses our own glyph)
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const socialIcon: Record<string, any> = {
-		Bandcamp: Disc3,
-		Spotify: AudioLines,
-		Deezer: Radio,
-		Instagram,
-		YouTube: Film
-	};
-
-	// Split shows into upcoming / past relative to today. The site is prerendered, so the
-	// build-time value only keeps the static HTML sensible — onMount re-reads the real date
-	// on the client so the split (and the footer year) stay correct between deploys.
-	let todayISO = $state(new Date().toISOString().slice(0, 10));
-	let year = $state(new Date().getFullYear());
-
-	const upcoming = $derived(
-		shows.filter((s) => s.date >= todayISO).sort((a, b) => a.date.localeCompare(b.date))
-	);
-	const past = $derived(
-		shows.filter((s) => s.date < todayISO).sort((a, b) => b.date.localeCompare(a.date))
-	);
-
-	// mobile nav dropdown
-	let menuOpen = $state(false);
-
-	onMount(() => {
-		const now = new Date();
-		todayISO = now.toISOString().slice(0, 10);
-		year = now.getFullYear();
-	});
-
-	const nav = [
-		{ href: '#groupe', label: 'Le groupe' },
-		{ href: '#membres', label: 'Membres' },
-		{ href: '#musique', label: 'Musique' },
-		{ href: '#live', label: 'Live' },
-		{ href: '#contact', label: 'Contact' }
-	];
 </script>
 
 <a class="skip-link" href="#top">Aller au contenu</a>
 
-<header class="nav">
-	<div class="wrap nav-inner">
-		<a class="brand" href="#top" onclick={() => (menuOpen = false)}>SMSCR</a>
-		<nav
-			id="primary-nav"
-			class="nav-links"
-			class:open={menuOpen}
-			aria-label="Navigation principale"
-		>
-			{#each nav as item (item.href)}
-				<a href={item.href} onclick={() => (menuOpen = false)}>{item.label}</a>
-			{/each}
-		</nav>
-		<div class="nav-actions">
-			<a
-				class="nav-ig"
-				href={instagram}
-				target="_blank"
-				rel="noopener"
-				aria-label="Instagram @supermegasupercoolrevolution"
-				title="@supermegasupercoolrevolution"
-			>
-				<Instagram size={20} />
-			</a>
-			<a class="nav-cta" href={bandcamp} target="_blank" rel="noopener" use:magnetic>
-				<Play size={15} strokeWidth={2.5} fill="currentColor" />
-				Écouter
-			</a>
-			<button
-				type="button"
-				class="nav-toggle"
-				aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-				aria-expanded={menuOpen}
-				aria-controls="primary-nav"
-				onclick={() => (menuOpen = !menuOpen)}
-			>
-				{#if menuOpen}<X size={22} />{:else}<Menu size={22} />{/if}
-			</button>
-		</div>
-	</div>
-</header>
+<Nav />
 
 <!-- HERO -->
 <section id="top" class="hero" tabindex="-1">
@@ -173,12 +84,14 @@
 				<strong>atmosphères bruitistes</strong> — toujours avec une bonne dose d'autodérision.
 			</p>
 			<div class="influences">
-				<span class="influences-label">Dans le rétro&nbsp;:</span>
+				<span class="influences-label">Influences&nbsp;:</span>
 				{#each band.influences as inf (inf)}<span class="chip">{inf}</span>{/each}
 			</div>
-			<div class="influences">
-				<span class="influences-label">Distinctions&nbsp;:</span>
-				{#each awards as a (a)}<span class="chip">{a}</span>{/each}
+			<div class="distinctions reveal" use:reveal={{ delay: 60 }}>
+				<p class="eyebrow"><Award size={13} />Distinctions</p>
+				<div class="distinction-list">
+					{#each awards as a (a)}<span class="distinction"><Award size={16} />{a}</span>{/each}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -310,182 +223,13 @@
 			<p class="eyebrow"><CalendarDays size={13} />Sur scène</p>
 			<h2 class="section-title">Live</h2>
 		</div>
-
-		{#if upcoming.length}
-			<h3 class="live-sub reveal" use:reveal>À venir</h3>
-			<ul class="shows">
-				{#each upcoming as s, i (s.date + s.venue)}
-					<li class="show upcoming reveal" use:reveal={{ delay: i * 70 }}>
-						<span class="show-date">{s.label}</span>
-						<span class="show-venue">{s.venue}</span>
-						<span class="show-city"><MapPin size={13} />{s.city}</span>
-						<span class="show-tag"><Ticket size={13} />{s.free ? 'Gratuit' : 'Billetterie'}</span>
-					</li>
-				{/each}
-			</ul>
-		{/if}
-
-		{#if past.length}
-			<h3 class="live-sub muted reveal" use:reveal>Déjà joué</h3>
-			<ul class="shows">
-				{#each past as s, i (s.date + s.venue)}
-					<li class="show reveal" use:reveal={{ delay: i * 70 }}>
-						<span class="show-date">{s.label}</span>
-						<span class="show-venue">{s.venue}</span>
-						<span class="show-city"><MapPin size={13} />{s.city}</span>
-						<span class="show-tag past">Archivé</span>
-					</li>
-				{/each}
-			</ul>
-		{/if}
+		<Shows {shows} pastLimit={4} moreHref="{base}/dates" />
 	</div>
 </section>
 
-<!-- CONTACT / FOOTER -->
-<footer id="contact">
-	<div class="wrap footer-inner">
-		<div class="footer-cta reveal" use:reveal>
-			<h2 class="section-title">Suivez la révolution</h2>
-			<div class="socials">
-				{#each links as l (l.url)}
-					{@const Icon = socialIcon[l.label] ?? ExternalLink}
-					<a class="social" href={l.url} target="_blank" rel="noopener">
-						<Icon size={16} />
-						{l.label}
-						<ArrowUpRight class="social-arrow" size={14} />
-					</a>
-				{/each}
-			</div>
-			<a class="footer-mail" href="mailto:contact@smscr.fr">
-				<Mail size={18} />
-				contact@smscr.fr
-			</a>
-		</div>
-		<div class="footer-meta reveal" use:reveal={{ delay: 120 }}>
-			<p class="footer-band">{band.name}</p>
-			<p class="footer-city">{band.city}</p>
-			<p class="footer-thanks">Merci à Antonio Di Giovanesco.</p>
-			<p class="footer-legal">
-				© {year} SMSCR — Site fait avec ✦ et beaucoup de fusion.
-			</p>
-		</div>
-	</div>
-</footer>
+<Footer />
 
 <style>
-	/* ---------- NAV ---------- */
-	.nav {
-		position: sticky;
-		top: 0;
-		z-index: 50;
-		backdrop-filter: blur(14px);
-		background: rgba(10, 4, 16, 0.6);
-		border-bottom: 1px solid rgba(246, 241, 255, 0.1);
-	}
-	.nav-inner {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		height: 64px;
-	}
-	.brand {
-		font-family: var(--display);
-		font-weight: 800;
-		font-size: 1.5rem;
-		text-decoration: none;
-		letter-spacing: 0.02em;
-	}
-	.nav-links {
-		display: flex;
-		gap: clamp(1rem, 2.4vw, 1.8rem);
-	}
-	.nav-links a {
-		position: relative;
-		text-decoration: none;
-		font-size: 0.92rem;
-		font-weight: 500;
-		color: var(--ink-dim);
-		transition: color 0.2s var(--ease);
-	}
-	.nav-links a::after {
-		content: '';
-		position: absolute;
-		left: 0;
-		bottom: -6px;
-		width: 100%;
-		height: 2px;
-		background: var(--magenta);
-		transform: scaleX(0);
-		transform-origin: left;
-		transition: transform 0.25s var(--ease);
-	}
-	.nav-links a:hover {
-		color: var(--ink);
-	}
-	.nav-links a:hover::after {
-		transform: scaleX(1);
-	}
-	.nav-actions {
-		display: flex;
-		align-items: center;
-		gap: 0.6rem;
-	}
-	.nav-ig {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 38px;
-		height: 38px;
-		border-radius: 999px;
-		color: var(--ink);
-		border: 1.5px solid rgba(246, 241, 255, 0.28);
-		transition:
-			color 0.2s var(--ease),
-			border-color 0.2s var(--ease),
-			transform 0.15s var(--ease);
-	}
-	.nav-ig:hover {
-		color: var(--magenta);
-		border-color: var(--magenta);
-		transform: translateY(-2px);
-	}
-	.nav-cta {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.45em;
-		text-decoration: none;
-		font-weight: 700;
-		font-size: 0.9rem;
-		padding: 0.5em 1.15em;
-		border-radius: 999px;
-		background: var(--lime);
-		color: #0a0410;
-		transition: transform 0.15s var(--ease);
-	}
-	.nav-cta:hover {
-		transform: translateY(-2px);
-	}
-	.nav-toggle {
-		display: none;
-		align-items: center;
-		justify-content: center;
-		width: 38px;
-		height: 38px;
-		border-radius: 999px;
-		background: transparent;
-		color: var(--ink);
-		border: 1.5px solid rgba(246, 241, 255, 0.28);
-		cursor: pointer;
-		transition:
-			color 0.2s var(--ease),
-			border-color 0.2s var(--ease);
-	}
-	.nav-toggle:hover {
-		color: var(--magenta);
-		border-color: var(--magenta);
-	}
-
 	/* ---------- HERO ---------- */
 	.hero {
 		padding-top: clamp(48px, 8vw, 96px);
@@ -618,6 +362,33 @@
 		font-weight: 700;
 		color: var(--cyan);
 		margin-right: 0.4rem;
+	}
+
+	/* ---------- DISTINCTIONS ---------- */
+	.distinctions {
+		margin-top: 2.2rem;
+	}
+	.distinction-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.7rem;
+		margin-top: 0.9rem;
+	}
+	.distinction {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5em;
+		padding: 0.62em 1.2em;
+		border: 1.5px solid rgba(182, 255, 26, 0.5);
+		border-radius: 999px;
+		background: linear-gradient(135deg, rgba(182, 255, 26, 0.16), rgba(34, 224, 255, 0.06));
+		color: var(--ink);
+		font-weight: 700;
+		font-size: 0.95rem;
+	}
+	.distinction :global(svg) {
+		color: var(--lime);
+		flex-shrink: 0;
 	}
 
 	/* ---------- BAND PHOTO ---------- */
@@ -804,163 +575,8 @@
 		font-variant-numeric: tabular-nums;
 	}
 
-	/* ---------- LIVE ---------- */
-	.live-sub {
-		font-family: var(--display);
-		font-weight: 700;
-		font-size: 1.35rem;
-		margin: 2.2rem 0 0.8rem;
-	}
-	.live-sub.muted {
-		color: var(--ink-dim);
-	}
-	.shows {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-	.show {
-		display: grid;
-		grid-template-columns: 210px 1fr auto auto;
-		gap: 1rem;
-		align-items: center;
-		padding: 1.2rem 0.4rem;
-		border-bottom: 1px solid rgba(246, 241, 255, 0.14);
-	}
-	.show.upcoming {
-		border-left: 3px solid var(--lime);
-		padding-left: 1rem;
-	}
-	.show-date {
-		font-weight: 700;
-		font-family: var(--display);
-	}
-	.show-venue {
-		font-size: 1.05rem;
-	}
-	.show-city {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35em;
-		color: var(--ink-dim);
-		font-size: 0.92rem;
-	}
-	.show-tag {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.4em;
-		justify-self: end;
-		font-size: 0.75rem;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		padding: 0.32em 0.85em;
-		border-radius: 999px;
-		background: var(--lime);
-		color: #0a0410;
-		white-space: nowrap;
-	}
-	.show-tag.past {
-		background: transparent;
-		border: 1px solid rgba(246, 241, 255, 0.3);
-		color: var(--ink-dim);
-	}
-
-	/* ---------- FOOTER ---------- */
-	footer {
-		border-top: 1px solid rgba(246, 241, 255, 0.14);
-		padding: clamp(56px, 8vw, 104px) 0 clamp(40px, 5vw, 56px);
-	}
-	.footer-inner {
-		display: grid;
-		grid-template-columns: 1.4fr 1fr;
-		gap: clamp(2rem, 5vw, 3rem);
-		align-items: end;
-	}
-	.socials {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.7rem;
-		margin-top: 1.6rem;
-	}
-	.social {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5em;
-		text-decoration: none;
-		font-weight: 700;
-		padding: 0.62em 1.15em;
-		border: 1.5px solid rgba(246, 241, 255, 0.3);
-		border-radius: 999px;
-		transition:
-			background 0.2s var(--ease),
-			color 0.2s var(--ease),
-			transform 0.2s var(--ease);
-	}
-	.social :global(.social-arrow) {
-		color: var(--magenta);
-		transition: transform 0.2s var(--ease);
-	}
-	.social:hover {
-		background: var(--ink);
-		color: #0a0410;
-		transform: translateY(-2px);
-	}
-	.social:hover :global(.social-arrow) {
-		color: #0a0410;
-		transform: translate(2px, -2px);
-	}
-	.footer-mail {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.55em;
-		margin-top: 1.3rem;
-		font-family: var(--display);
-		font-weight: 700;
-		font-size: clamp(1.15rem, 2.6vw, 1.6rem);
-		text-decoration: none;
-		color: var(--ink);
-		width: fit-content;
-		border-bottom: 2px solid transparent;
-		transition:
-			color 0.2s var(--ease),
-			border-color 0.2s var(--ease);
-	}
-	.footer-mail :global(svg) {
-		color: var(--magenta);
-	}
-	.footer-mail:hover {
-		color: var(--magenta);
-		border-color: var(--magenta);
-	}
-	.footer-meta {
-		text-align: right;
-	}
-	.footer-thanks {
-		color: var(--ink-dim);
-		font-size: 0.88rem;
-		margin: 0 0 0.2rem;
-	}
-	.footer-band {
-		font-family: var(--display);
-		font-weight: 700;
-		font-size: 1.15rem;
-		margin: 0;
-	}
-	.footer-city {
-		color: var(--ink-dim);
-		margin: 0.25rem 0;
-	}
-	.footer-legal {
-		color: var(--ink-dim);
-		font-size: 0.82rem;
-		margin-top: 1.1rem;
-	}
-
 	/* keyboard accessibility */
-	.nav a:focus-visible,
 	.btn:focus-visible,
-	.social:focus-visible,
 	.chip:focus-visible {
 		outline: 2px solid var(--cyan);
 		outline-offset: 3px;
@@ -974,63 +590,6 @@
 		}
 	}
 
-	@media (max-width: 820px) {
-		.nav-toggle {
-			display: inline-flex;
-		}
-		.nav-links {
-			position: absolute;
-			top: 64px;
-			left: 0;
-			right: 0;
-			flex-direction: column;
-			gap: 0.4rem;
-			padding: 0.8rem var(--gutter) 1.2rem;
-			background: rgba(10, 4, 16, 0.96);
-			backdrop-filter: blur(14px);
-			border-bottom: 1px solid rgba(246, 241, 255, 0.12);
-			transform: translateY(-8px);
-			opacity: 0;
-			pointer-events: none;
-			transition:
-				opacity 0.2s var(--ease),
-				transform 0.2s var(--ease);
-		}
-		.nav-links.open {
-			opacity: 1;
-			transform: none;
-			pointer-events: auto;
-		}
-		.nav-links a {
-			padding: 0.55rem 0;
-			font-size: 1.05rem;
-		}
-		.show {
-			grid-template-columns: 1fr auto;
-			row-gap: 0.35rem;
-			align-items: center;
-		}
-		.show-date {
-			grid-column: 1;
-		}
-		.show-tag {
-			grid-row: 1 / span 2;
-			grid-column: 2;
-			align-self: center;
-		}
-		.show-venue,
-		.show-city {
-			grid-column: 1;
-		}
-		.footer-inner {
-			grid-template-columns: 1fr;
-			align-items: start;
-		}
-		.footer-meta {
-			text-align: left;
-		}
-	}
-
 	@media (max-width: 520px) {
 		.hero-cta {
 			flex-direction: column;
@@ -1038,9 +597,6 @@
 		}
 		.hero-cta .btn {
 			text-align: center;
-		}
-		.nav-cta {
-			padding: 0.5em 0.95em;
 		}
 	}
 </style>

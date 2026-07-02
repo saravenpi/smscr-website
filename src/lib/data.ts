@@ -37,7 +37,7 @@ export type Member = {
 
 export const members: Member[] = [
 	{
-		name: 'Siméon',
+		name: 'Mr. Meon',
 		role: 'Trompette',
 		blurb: 'Les mélodies cuivrées qui percent le mur du son. Membre du trio fondateur.'
 	},
@@ -57,7 +57,7 @@ export const members: Member[] = [
 		blurb: 'Frappe hyperactive nourrie à la drum & bass. Locomotive rythmique du combo.'
 	},
 	{
-		name: 'Justinien',
+		name: 'Juice',
 		role: 'Claviers',
 		blurb: 'Synthèse analogique et nappes psychédéliques. L’alchimiste des sons neufs.'
 	}
