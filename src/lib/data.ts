@@ -160,7 +160,7 @@ export const shows: Show[] = [
 	{ date: '2025-04-05', label: '5 avril 2025', venue: 'Bar des Capucins (jam MSF Palestine)', city: 'Lyon (69)' },
 	{ date: '2025-04-09', label: '9 avril 2025', venue: 'La Pente', city: 'Lyon (69)' },
 	{ date: '2025-04-11', label: '11 avril 2025', venue: 'Parvis de l’Amphithéâtre 3000', city: 'Lyon (69)' },
-	{ date: '2025-04-26', label: '26 avril 2025', venue: 'Live session INA', city: 'Île-de-France' },
+	{ date: '2025-04-26', label: '26 avril 2025', venue: 'Live session INA', city: 'Bry-sur-Marne (94)' },
 	{ date: '2025-04-30', label: '30 avril 2025', venue: 'Le Heat (Jazz Day)', city: 'Lyon (69)' },
 	{ date: '2025-05-02', label: '2 mai 2025', venue: 'Toï Toï le Zinc', city: 'Villeurbanne (69)' },
 	{ date: '2025-06-06', label: '6 juin 2025', venue: 'Marché Gare', city: 'Lyon (69)' },
