@@ -28,6 +28,19 @@
 	import Download from '@lucide/svelte/icons/download';
 	import FileText from '@lucide/svelte/icons/file-text';
 	import Mail from '@lucide/svelte/icons/mail';
+	import Camera from '@lucide/svelte/icons/camera';
+	import heroPhoto from '$lib/assets/photos/hero.jpg';
+	import gal01 from '$lib/assets/photos/gal-01.jpg';
+	import gal02 from '$lib/assets/photos/gal-02.jpg';
+	import gal03 from '$lib/assets/photos/gal-03.jpg';
+	import gal04 from '$lib/assets/photos/gal-04.jpg';
+	import gal05 from '$lib/assets/photos/gal-05.jpg';
+	import gal06 from '$lib/assets/photos/gal-06.jpg';
+	import gal07 from '$lib/assets/photos/gal-07.jpg';
+	import gal08 from '$lib/assets/photos/gal-08.jpg';
+	import gal09 from '$lib/assets/photos/gal-09.jpg';
+	import gal10 from '$lib/assets/photos/gal-10.jpg';
+	import gal11 from '$lib/assets/photos/gal-11.jpg';
 
 	// rotating accent per member so the line-up reads like art, not a roster
 	const accents = ['var(--magenta)', 'var(--cyan)', 'var(--lime)', 'var(--orange)', 'var(--purple)'];
@@ -39,6 +52,22 @@
 		.find((l) => l.label === 'Spotify')
 		?.url.match(/artist\/([A-Za-z0-9]+)/)?.[1];
 	const ytId = featuredVideoId;
+
+	// Live & backstage gallery — mixed orientations; each item keeps its intrinsic
+	// ratio (w/h) so portraits and landscapes sit flush in the scroll carousel.
+	const gallery = [
+		{ src: gal01, w: 1400, h: 934, credit: 'Grrrnd Zéro', alt: 'Les cinq membres de SMSCR passent la tête derrière le bar du Grrrnd Zéro' },
+		{ src: gal02, w: 1080, h: 1080, credit: 'Mathieu Courtin', alt: 'SuperMegaSuperCool Révolution au complet sur scène' },
+		{ src: gal03, w: 933, h: 1400, credit: '', alt: 'Silhouettes du groupe dans une lumière orange psychédélique' },
+		{ src: gal04, w: 1400, h: 933, credit: 'Kim Kimstoical', alt: 'Le groupe posé sur un mur d’amplis' },
+		{ src: gal05, w: 1400, h: 933, credit: '', alt: 'Le trompettiste de SMSCR chante au micro en concert' },
+		{ src: gal06, w: 1400, h: 933, credit: 'Kim Kimstoical', alt: 'Deux membres du groupe cachés dans la végétation' },
+		{ src: gal07, w: 1400, h: 933, credit: 'Kim Kimstoical', alt: 'Le guitariste de SMSCR sous une lumière rouge' },
+		{ src: gal08, w: 1400, h: 933, credit: 'Mayli Bentoumia', alt: 'Le groupe en concert baigné de lumière violette' },
+		{ src: gal09, w: 933, h: 1400, credit: 'Norah Mons', alt: 'Le bassiste de SMSCR dans un faisceau de lumière' },
+		{ src: gal10, w: 1400, h: 933, credit: '', alt: 'Le batteur de SMSCR en plein solo' },
+		{ src: gal11, w: 1400, h: 933, credit: '', alt: 'Portrait noir et blanc d’un membre du groupe' }
+	];
 </script>
 
 <a class="skip-link" href="#top">Aller au contenu</a>
@@ -76,6 +105,18 @@
 		</div>
 	</div>
 </section>
+
+<div class="wrap">
+	<img
+		class="hero-photo"
+		src={heroPhoto}
+		alt="Les cinq membres de SuperMegaSuperCool Révolution en imperméables de détective"
+		width="2000"
+		height="1600"
+		loading="lazy"
+		decoding="async"
+	/>
+</div>
 
 <Marquee items={[band.name, 'PROG · FUSION · CHAOS']} accent="var(--lime)" />
 
@@ -225,6 +266,38 @@
 				</article>
 			{/each}
 		</div>
+	</div>
+</section>
+
+<!-- GALERIE -->
+<section id="galerie" class="gallery-section">
+	<div class="wrap">
+		<div class="reveal" use:reveal>
+			<p class="eyebrow"><Camera size={13} />En images</p>
+			<h2 class="section-title">Sur scène &amp; en coulisses</h2>
+		</div>
+	</div>
+	<ul class="gallery" tabindex="0" aria-label="Galerie photo du groupe (défilement horizontal)">
+		{#each gallery as ph, i (i)}
+			<li class="shot">
+				<img
+					src={ph.src}
+					alt={ph.alt}
+					width={ph.w}
+					height={ph.h}
+					loading="lazy"
+					decoding="async"
+					style="aspect-ratio: {ph.w} / {ph.h}"
+				/>
+				{#if ph.credit}<span class="shot-credit">© {ph.credit}</span>{/if}
+			</li>
+		{/each}
+	</ul>
+	<div class="wrap">
+		<p class="gallery-credits">
+			Photos&nbsp;: Kim Kimstoical, Mathieu Courtin, Mayli Bentoumia, Norah Mons, Gilles Vugliano
+			· live à Grrrnd Zéro &amp; ailleurs.
+		</p>
 	</div>
 </section>
 
@@ -677,6 +750,83 @@
 		color: var(--cyan);
 		/* long email must not overflow the card */
 		overflow-wrap: anywhere;
+	}
+
+	/* ---------- HERO PHOTO ---------- */
+	.hero-photo {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 2000 / 1600;
+		object-fit: cover;
+		border-radius: var(--radius);
+		border: 1px solid rgba(246, 241, 255, 0.14);
+		margin-top: clamp(1rem, 3vw, 2rem);
+	}
+
+	/* ---------- GALERIE ---------- */
+	.gallery-section {
+		padding-bottom: clamp(40px, 7vw, 90px);
+	}
+	.gallery {
+		list-style: none;
+		margin: 2rem 0 1.4rem;
+		/* full-bleed horizontal carousel with its own gutter padding */
+		padding: 0.4rem var(--gutter);
+		display: flex;
+		gap: 1rem;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+	}
+	.gallery::-webkit-scrollbar {
+		display: none;
+	}
+	.gallery:focus-visible {
+		outline: 2px solid var(--cyan);
+		outline-offset: 4px;
+		border-radius: var(--radius);
+	}
+	.shot {
+		position: relative;
+		flex: 0 0 auto;
+		height: clamp(240px, 42vh, 420px);
+		scroll-snap-align: center;
+		border-radius: var(--radius);
+		overflow: hidden;
+		border: 1px solid rgba(246, 241, 255, 0.14);
+	}
+	.shot img {
+		display: block;
+		height: 100%;
+		width: auto;
+		max-width: none;
+		object-fit: cover;
+		transition: transform 0.4s var(--ease);
+	}
+	.shot:hover img {
+		transform: scale(1.04);
+	}
+	.shot-credit {
+		position: absolute;
+		inset: auto 0 0 0;
+		padding: 1.4rem 0.7rem 0.55rem;
+		font-size: 0.7rem;
+		letter-spacing: 0.05em;
+		color: var(--ink);
+		background: linear-gradient(transparent, rgba(10, 4, 16, 0.8));
+		opacity: 0;
+		transition: opacity 0.3s var(--ease);
+	}
+	.shot:hover .shot-credit,
+	.shot:focus-within .shot-credit {
+		opacity: 1;
+	}
+	.gallery-credits {
+		color: var(--ink-dim);
+		font-size: 0.85rem;
+		margin: 0;
 	}
 
 	/* ---------- RESPONSIVE ---------- */
