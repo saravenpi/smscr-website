@@ -32,6 +32,9 @@
 	import Camera from '@lucide/svelte/icons/camera';
 	import Quote from '@lucide/svelte/icons/quote';
 	import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
+	import X from '@lucide/svelte/icons/x';
+	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
+	import ChevronRight from '@lucide/svelte/icons/chevron-right';
 	import heroPhoto from '$lib/assets/photos/hero.jpg';
 	import gal01 from '$lib/assets/photos/gal-01.jpg';
 	import gal02 from '$lib/assets/photos/gal-02.jpg';
@@ -71,6 +74,57 @@
 		{ src: gal10, w: 1400, h: 933, credit: '', alt: 'Le batteur de SMSCR en plein solo' },
 		{ src: gal11, w: 1400, h: 933, credit: '', alt: 'Portrait noir et blanc d’un membre du groupe' }
 	];
+
+	// ---- Fullscreen gallery lightbox. Native <dialog> gives the top layer, focus
+	// trap, Escape handling and focus restore for free. ----
+	let dialogEl: HTMLDialogElement | undefined = $state();
+	let lightboxOpen = $state(false);
+	let lightboxIndex = $state(0);
+	let swipeX = 0;
+
+	function openLightbox(i: number) {
+		lightboxIndex = i;
+		lightboxOpen = true;
+	}
+	function closeLightbox() {
+		lightboxOpen = false;
+	}
+	function nextShot() {
+		lightboxIndex = (lightboxIndex + 1) % gallery.length;
+	}
+	function prevShot() {
+		lightboxIndex = (lightboxIndex - 1 + gallery.length) % gallery.length;
+	}
+	function onLightboxKeydown(e: KeyboardEvent) {
+		if (e.key === 'ArrowRight') nextShot();
+		else if (e.key === 'ArrowLeft') prevShot();
+	}
+	function onLightboxClick(e: MouseEvent) {
+		// close on backdrop/blur clicks, but not on the image or a control
+		if (!(e.target as HTMLElement).closest('.lb-img, button')) closeLightbox();
+	}
+	function onSwipeStart(e: PointerEvent) {
+		swipeX = e.clientX;
+	}
+	function onSwipeEnd(e: PointerEvent) {
+		const dx = e.clientX - swipeX;
+		if (Math.abs(dx) > 50) (dx < 0 ? nextShot : prevShot)();
+	}
+
+	// drive the native dialog from state
+	$effect(() => {
+		if (!dialogEl) return;
+		if (lightboxOpen && !dialogEl.open) dialogEl.showModal();
+		else if (!lightboxOpen && dialogEl.open) dialogEl.close();
+	});
+	// lock background scroll while open
+	$effect(() => {
+		if (!lightboxOpen) return;
+		document.body.style.overflow = 'hidden';
+		return () => {
+			document.body.style.overflow = '';
+		};
+	});
 </script>
 
 <a class="skip-link" href="#top">Aller au contenu</a>
@@ -112,10 +166,10 @@
 <div class="wrap">
 	<img
 		class="hero-photo"
-		src={heroPhoto}
-		alt="Les cinq membres de SuperMegaSuperCool Révolution en imperméables de détective"
-		width="2000"
-		height="1600"
+		src={bandPhoto}
+		alt="Le groupe SuperMegaSuperCool Révolution"
+		width="1400"
+		height="933"
 		loading="lazy"
 		decoding="async"
 	/>
@@ -158,10 +212,10 @@
 		<img
 			class="band-photo reveal"
 			use:reveal
-			src={bandPhoto}
-			alt="Le groupe SuperMegaSuperCool Révolution"
-			width="1400"
-			height="933"
+			src={heroPhoto}
+			alt="Les cinq membres de SuperMegaSuperCool Révolution en imperméables de détective"
+			width="2000"
+			height="1600"
 			loading="lazy"
 		/>
 	</div>
@@ -280,19 +334,26 @@
 			<h2 class="section-title">Sur scène &amp; en coulisses</h2>
 		</div>
 	</div>
-	<ul class="gallery" tabindex="0" aria-label="Galerie photo du groupe (défilement horizontal)">
+	<ul class="gallery" aria-label="Galerie photo du groupe (défilement horizontal)">
 		{#each gallery as ph, i (i)}
 			<li class="shot">
-				<img
-					src={ph.src}
-					alt={ph.alt}
-					width={ph.w}
-					height={ph.h}
-					loading="lazy"
-					decoding="async"
-					style="aspect-ratio: {ph.w} / {ph.h}"
-				/>
-				{#if ph.credit}<span class="shot-credit">© {ph.credit}</span>{/if}
+				<button
+					type="button"
+					class="shot-btn"
+					onclick={() => openLightbox(i)}
+					aria-label="Agrandir : {ph.alt}"
+				>
+					<img
+						src={ph.src}
+						alt={ph.alt}
+						width={ph.w}
+						height={ph.h}
+						loading="lazy"
+						decoding="async"
+						style="aspect-ratio: {ph.w} / {ph.h}"
+					/>
+					{#if ph.credit}<span class="shot-credit">© {ph.credit}</span>{/if}
+				</button>
 			</li>
 		{/each}
 	</ul>
@@ -303,6 +364,38 @@
 		</p>
 	</div>
 </section>
+
+<!-- GALLERY LIGHTBOX -->
+<dialog
+	class="lightbox"
+	bind:this={dialogEl}
+	aria-label="Galerie en plein écran"
+	onclose={() => (lightboxOpen = false)}
+	onclick={onLightboxClick}
+	onkeydown={onLightboxKeydown}
+	onpointerdown={onSwipeStart}
+	onpointerup={onSwipeEnd}
+>
+	{#if lightboxOpen}
+		{@const ph = gallery[lightboxIndex]}
+		<img class="lb-bg" src={ph.src} alt="" aria-hidden="true" />
+		<div class="lb-scrim"></div>
+		<figure class="lb-stage">
+			<img class="lb-img" src={ph.src} alt={ph.alt} />
+			{#if ph.credit}<figcaption class="lb-credit">© {ph.credit}</figcaption>{/if}
+		</figure>
+		<button class="lb-btn lb-close" type="button" onclick={closeLightbox} aria-label="Fermer">
+			<X size={22} />
+		</button>
+		<button class="lb-btn lb-prev" type="button" onclick={prevShot} aria-label="Photo précédente">
+			<ChevronLeft size={26} />
+		</button>
+		<button class="lb-btn lb-next" type="button" onclick={nextShot} aria-label="Photo suivante">
+			<ChevronRight size={26} />
+		</button>
+		<p class="lb-counter">{lightboxIndex + 1} / {gallery.length}</p>
+	{/if}
+</dialog>
 
 <!-- LIVE -->
 <section id="live" class="live-section">
@@ -847,7 +940,7 @@
 		display: block;
 		width: 100%;
 		height: auto;
-		aspect-ratio: 2000 / 1600;
+		aspect-ratio: 1400 / 933;
 		object-fit: cover;
 		border-radius: var(--radius);
 		border: 1px solid rgba(246, 241, 255, 0.14);
@@ -873,11 +966,6 @@
 	}
 	.gallery::-webkit-scrollbar {
 		display: none;
-	}
-	.gallery:focus-visible {
-		outline: 2px solid var(--cyan);
-		outline-offset: 4px;
-		border-radius: var(--radius);
 	}
 	.shot {
 		position: relative;
@@ -918,6 +1006,167 @@
 		color: var(--ink-dim);
 		font-size: 0.85rem;
 		margin: 0;
+	}
+
+	/* ---------- LIGHTBOX ---------- */
+	.shot-btn {
+		display: block;
+		height: 100%;
+		padding: 0;
+		border: 0;
+		background: none;
+		cursor: zoom-in;
+		border-radius: inherit;
+	}
+	.shot-btn:focus-visible {
+		outline: 2px solid var(--cyan);
+		outline-offset: 3px;
+	}
+
+	.lightbox {
+		position: fixed;
+		inset: 0;
+		width: 100vw;
+		height: 100vh;
+		height: 100dvh;
+		max-width: none;
+		max-height: none;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		overflow: hidden;
+	}
+	.lightbox::backdrop {
+		background: rgba(6, 2, 10, 0.72);
+		backdrop-filter: blur(6px);
+	}
+	.lb-bg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		filter: blur(44px) brightness(0.42) saturate(1.25);
+		transform: scale(1.2);
+	}
+	.lb-scrim {
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(130% 130% at 50% 45%, transparent 30%, rgba(6, 2, 10, 0.62));
+	}
+	.lb-stage {
+		position: absolute;
+		inset: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.9rem;
+		/* extra top/bottom room reserved for the close button & counter */
+		padding: clamp(3.4rem, 8vh, 4.5rem) clamp(1rem, 5vw, 3.5rem);
+	}
+	.lb-img {
+		max-width: min(94vw, 1400px);
+		max-height: 78vh;
+		max-height: 78dvh;
+		width: auto;
+		height: auto;
+		object-fit: contain;
+		border-radius: 10px;
+		box-shadow: 0 30px 90px rgba(0, 0, 0, 0.65);
+	}
+	.lb-credit {
+		margin: 0;
+		color: var(--ink-dim);
+		font-size: 0.82rem;
+		letter-spacing: 0.03em;
+		text-align: center;
+	}
+	.lb-btn {
+		position: absolute;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: clamp(40px, 10vw, 46px);
+		height: clamp(40px, 10vw, 46px);
+		border-radius: 999px;
+		border: 1px solid rgba(246, 241, 255, 0.25);
+		background: rgba(10, 4, 16, 0.5);
+		backdrop-filter: blur(8px);
+		color: var(--ink);
+		cursor: pointer;
+		transition:
+			background 0.2s var(--ease),
+			border-color 0.2s var(--ease),
+			transform 0.15s var(--ease);
+	}
+	.lb-btn:hover {
+		background: rgba(255, 46, 136, 0.25);
+		border-color: var(--magenta);
+	}
+	.lb-btn:focus-visible {
+		outline: 2px solid var(--cyan);
+		outline-offset: 3px;
+	}
+	.lb-close {
+		top: clamp(0.7rem, 2vw, 1.4rem);
+		right: clamp(0.7rem, 2vw, 1.4rem);
+	}
+	.lb-prev,
+	.lb-next {
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	.lb-prev {
+		left: clamp(0.5rem, 2vw, 1.6rem);
+	}
+	.lb-next {
+		right: clamp(0.5rem, 2vw, 1.6rem);
+	}
+	.lb-prev:hover,
+	.lb-next:hover {
+		transform: translateY(-50%) scale(1.08);
+	}
+	.lb-counter {
+		position: absolute;
+		bottom: clamp(0.8rem, 2.5vw, 1.6rem);
+		left: 50%;
+		transform: translateX(-50%);
+		margin: 0;
+		font-size: 0.8rem;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		color: var(--ink);
+		background: rgba(10, 4, 16, 0.5);
+		border: 1px solid rgba(246, 241, 255, 0.18);
+		padding: 0.3em 0.9em;
+		border-radius: 999px;
+		backdrop-filter: blur(8px);
+	}
+	.lightbox[open] {
+		animation: lbFade 0.25s var(--ease);
+	}
+	.lightbox[open] .lb-img {
+		animation: lbZoom 0.3s var(--ease);
+	}
+	@keyframes lbFade {
+		from {
+			opacity: 0;
+		}
+	}
+	@keyframes lbZoom {
+		from {
+			transform: scale(0.94);
+			opacity: 0;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.lightbox[open],
+		.lightbox[open] .lb-img {
+			animation: none;
+		}
 	}
 
 	/* ---------- RESPONSIVE ---------- */

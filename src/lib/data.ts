@@ -237,7 +237,7 @@ export const pressDocs: PressDoc[] = [
 		desc: 'Plan de scène, patch et besoins backline & retours pour les régies.',
 		file: '/smscr-fiche-technique.pdf',
 		downloadAs: 'SMSCR-Fiche-technique.pdf',
-		meta: 'PDF · 1,1 Mo'
+		meta: 'PDF · 2,8 Mo'
 	}
 ];
 
