@@ -253,8 +253,9 @@ export const heroAward = 'Lauréats Un Doua Jazz 2024';
 export type PressDoc = {
 	title: string;
 	desc: string;
-	file: string; // root-relative path under static/
-	downloadAs: string; // ASCII-safe filename suggested to the browser
+	file?: string; // local file under static/ (triggers a download)
+	href?: string; // external URL instead of a local file (opens in a new tab)
+	downloadAs?: string; // ASCII-safe filename suggested to the browser (local files)
 	meta: string; // format · date · size
 };
 
@@ -272,7 +273,23 @@ export const pressDocs: PressDoc[] = [
 		file: '/smscr-fiche-technique.pdf',
 		downloadAs: 'SMSCR-Fiche-technique.pdf',
 		meta: 'PDF · 2,8 Mo'
+	},
+	{
+		title: 'Pack photos',
+		desc: 'Les meilleures photos du groupe en haute définition (live & promo).',
+		file: '/smscr-pack-photos.zip',
+		downloadAs: 'SMSCR-Photos.zip',
+		meta: 'ZIP · 44 Mo'
 	}
+	// Pack vidéos (~490 Mo) : trop lourd pour le repo (GitHub bloque >100 Mo).
+	// Héberger le zip ailleurs (Drive, Dropbox, WeTransfer permanent…) puis
+	// ajouter une entrée avec `href` (au lieu de `file`) :
+	// {
+	// 	title: 'Pack vidéos',
+	// 	desc: 'Clips, teasers et reels promo en haute définition.',
+	// 	href: 'https://…',
+	// 	meta: 'ZIP · ~490 Mo'
+	// }
 ];
 
 // Press quotes (from the band's dossier de presse). The FIP one links to the

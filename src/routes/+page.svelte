@@ -439,12 +439,14 @@
 
 		<h3 class="press-subhead reveal" use:reveal>À télécharger</h3>
 		<div class="press-grid">
-			{#each pressDocs as doc, i (doc.file)}
+			{#each pressDocs as doc, i (doc.title)}
 				<a
 					class="press-card reveal"
 					use:reveal={{ delay: i * 90 }}
-					href="{base}{doc.file}"
-					download={doc.downloadAs}
+					href={doc.href ?? `${base}${doc.file}`}
+					download={doc.file ? doc.downloadAs : undefined}
+					target={doc.href ? '_blank' : undefined}
+					rel={doc.href ? 'noopener' : undefined}
 				>
 					<span class="press-icon"><Download size={22} strokeWidth={2.25} /></span>
 					<span class="press-text">
