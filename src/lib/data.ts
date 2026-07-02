@@ -15,10 +15,11 @@ export const contactEmail = 'contact@smscr.fr';
 export const metaDescription =
 	'SuperMegaSuperCool Révolution (SMSCR) — quintette de jazz psychédélique et prog-fusion de Lyon. Écoutez la musique, découvrez le groupe et les dates de concert.';
 
-// YouTube video featured in the on-site player. Kept separate from the YouTube
-// entry in `links` (which is the band's public profile for the footer + SEO
-// `sameAs`): a channel URL and a single embeddable clip are different things.
-export const featuredVideoId = '-Pk-eKO_yDA';
+// YouTube video featured in the on-site player — the official "Prélude & Intro"
+// music video. Kept separate from the YouTube entry in `links` (the band's public
+// profile for the footer + SEO `sameAs`): a channel URL and an embeddable clip
+// are different things.
+export const featuredVideoId = 'K251kNDaAMA';
 
 export const band = {
 	name: 'SuperMegaSuperCool Révolution',
@@ -203,10 +204,10 @@ export const links: Link[] = [
 // Wins/selections shown as distinction pills; awards[0] also appears in the hero
 // eyebrow, so keep the strongest first. Also fed to schema.org `award` (JSON-LD).
 export const awards = [
-	'Lauréats Un Doua Jazz 2024',
-	'Lauréats Bourse d’Initiative Jeunes — BIJ Villeurbanne',
+	'Sélection Tremplin JazzContreBand 2025',
 	'Accompagnement Ninkasi Music Lab',
-	'Sélection Tremplin JazzContreBand 2025'
+	'Lauréats Un Doua Jazz 2024',
+	'Lauréats Bourse d’Initiative Jeunes — BIJ Villeurbanne'
 ];
 
 // Downloadable pro documents (press kit, and later the technical rider). Files
