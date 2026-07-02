@@ -255,7 +255,7 @@ export const links: Link[] = [
 // eyebrow, so keep the strongest first. Also fed to schema.org `award` (JSON-LD).
 export const awards = [
 	'Lauréats Un Doua Jazz 2024',
-	'Lauréats Bourse d’Initiative Jeunes (BIJ)',
+	'Lauréats Bourse d’Initiative Jeunes — BIJ Villeurbanne',
 	'Accompagnement Ninkasi Music Lab',
 	'Sélection Tremplin JazzContreBand 2025'
 ];
