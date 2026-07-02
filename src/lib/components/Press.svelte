@@ -87,7 +87,7 @@
 	}
 	.press-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
 		gap: 1.5rem;
 	}
 	.press-card {
@@ -156,7 +156,7 @@
 	}
 	.press-quotes {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
 		gap: 1.2rem;
 		margin: 0 0 2.6rem;
 	}

@@ -200,4 +200,19 @@
 			padding: 0.5em 0.95em;
 		}
 	}
+
+	/* very small phones (≤360px, e.g. iPhone SE): shrink the brand + CTA so the
+	   sticky bar's brand + actions fit the row without pushing horizontal scroll */
+	@media (max-width: 380px) {
+		.nav-inner {
+			gap: 0.5rem;
+		}
+		.brand {
+			font-size: 1.25rem;
+		}
+		.nav-cta {
+			padding: 0.45em 0.8em;
+			font-size: 0.82rem;
+		}
+	}
 </style>

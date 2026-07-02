@@ -21,6 +21,7 @@
 
 <style>
 	.marquee {
+		position: relative;
 		overflow: hidden;
 		white-space: nowrap;
 		border-block: 2px solid var(--hairline);
@@ -79,8 +80,14 @@
 		}
 	}
 
+	/* Pinned to the marquee's origin (which is now position:relative) so the
+	   marquee's overflow:hidden clips it — otherwise this absolute span lands at
+	   the far end of the very wide scrolling track and pushes the page width out,
+	   causing horizontal scroll on browsers where html{overflow-x:clip} is weaker. */
 	.sr-only {
 		position: absolute;
+		top: 0;
+		left: 0;
 		width: 1px;
 		height: 1px;
 		padding: 0;
