@@ -280,16 +280,13 @@ export const pressDocs: PressDoc[] = [
 		file: '/smscr-pack-photos.zip',
 		downloadAs: 'SMSCR-Photos.zip',
 		meta: 'ZIP · 44 Mo'
+	},
+	{
+		title: 'Pack vidéos',
+		desc: 'Clips, teasers et reels promo en haute définition, hébergés sur Google Drive.',
+		href: 'https://drive.google.com/drive/folders/1LeGnHhVm0rUEr5CTJHGk02Kq4eeZCxm7?usp=drive_link',
+		meta: 'Vidéos HD · Google Drive'
 	}
-	// Pack vidéos (~490 Mo) : trop lourd pour le repo (GitHub bloque >100 Mo).
-	// Héberger le zip ailleurs (Drive, Dropbox, WeTransfer permanent…) puis
-	// ajouter une entrée avec `href` (au lieu de `file`) :
-	// {
-	// 	title: 'Pack vidéos',
-	// 	desc: 'Clips, teasers et reels promo en haute définition.',
-	// 	href: 'https://…',
-	// 	meta: 'ZIP · ~490 Mo'
-	// }
 ];
 
 // Press quotes (from the band's dossier de presse). The FIP one links to the
