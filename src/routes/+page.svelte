@@ -310,11 +310,6 @@
 					<h3 class="release-title">{r.title}</h3>
 					{#if r.label}<p class="release-label">Label · {r.label}</p>{/if}
 					{#if r.note}<p class="release-note">{r.note}</p>{/if}
-					{#if r.tracks}
-						<ol class="tracklist">
-							{#each r.tracks as t (t)}<li>{t}</li>{/each}
-						</ol>
-					{/if}
 					{#if r.link}
 						<a class="btn btn-primary sm" href={r.link} target="_blank" rel="noopener">
 							<Disc3 size={16} />
@@ -720,11 +715,12 @@
 	.releases {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		align-items: start;
 		gap: 1.5rem;
 		margin-top: 2rem;
 	}
 	.release {
+		display: flex;
+		flex-direction: column;
 		border: 1px solid rgba(246, 241, 255, 0.16);
 		border-radius: var(--radius);
 		padding: clamp(1.4rem, 3vw, 2rem);
@@ -732,6 +728,11 @@
 		transition:
 			transform 0.25s var(--ease),
 			border-color 0.25s var(--ease);
+	}
+	/* push the CTA to the bottom so buttons align across a row of equal-height cards */
+	.release .btn {
+		margin-top: auto;
+		align-self: flex-start;
 	}
 	.release:hover {
 		transform: translateY(-4px);
@@ -777,19 +778,6 @@
 		color: var(--ink-dim);
 		font-style: italic;
 		margin: 0 0 1rem;
-	}
-	.tracklist {
-		margin: 0.7rem 0 1.4rem;
-		padding-left: 1.4rem;
-		color: var(--ink-dim);
-		font-size: 0.92rem;
-	}
-	.tracklist li {
-		padding: 0.14rem 0;
-	}
-	.tracklist li::marker {
-		color: var(--lime);
-		font-variant-numeric: tabular-nums;
 	}
 
 	/* ---------- PRESSE & BOOKING ---------- */
