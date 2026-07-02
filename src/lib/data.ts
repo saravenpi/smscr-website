@@ -240,3 +240,33 @@ export const pressDocs: PressDoc[] = [
 		meta: 'PDF · 1,1 Mo'
 	}
 ];
+
+// Press quotes (from the band's dossier de presse). The FIP one links to the
+// Radio France article; the others have no public URL, so no link is shown.
+export type PressQuote = {
+	quote: string;
+	author?: string;
+	outlet: string;
+	url?: string;
+};
+
+export const pressQuotes: PressQuote[] = [
+	{
+		quote:
+			'Déjà leur premier album, véritable bombe sonore produite par Rhône X, marquait la naissance d’un groupe hors normes […] SMSCR se définit par l’abolition des frontières esthétiques, un jazz turbulent, psychédélique, dopé au funk et à la fusion.',
+		author: 'Véronique Hilaire',
+		outlet: 'FIP · Radio France',
+		url: 'https://www.radiofrance.fr/fip/a-suivre-les-peregrinations-musicales-de-supermegasupercool-revolution-smscr-en-exclusivite-5238300'
+	},
+	{
+		quote:
+			'Un jazz fusion plein de groove et de funk, mais qui refuse de se laisser enfermer dans les codes du genre. […] Pour être cools, ils sont cools. Ils n’usurpent pas leur drôle de nom.',
+		author: 'J.-P. Zanolo',
+		outlet: 'Le Progrès'
+	},
+	{
+		quote:
+			'Comment ne pas se laisser emporter par ces cinq acrobates survitaminés ? […] Cette bande de potes garantit de belles promesses et on espère les revoir bientôt pour un deuxième round toujours plus frénétique.',
+		outlet: 'Septième'
+	}
+];
