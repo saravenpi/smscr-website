@@ -4,6 +4,7 @@
 	import { magnetic } from '$lib/magnetic';
 	import { onMount } from 'svelte';
 	import Instagram from '$lib/components/Instagram.svelte';
+	import bandPhoto from '$lib/assets/band.jpg';
 	import { band, members, releases, shows, links, awards } from '$lib/data';
 	import Play from '@lucide/svelte/icons/play';
 	import CalendarDays from '@lucide/svelte/icons/calendar-days';
@@ -176,6 +177,18 @@
 				{#each band.influences as inf (inf)}<span class="chip">{inf}</span>{/each}
 			</div>
 		</div>
+	</div>
+
+	<div class="wrap">
+		<img
+			class="band-photo reveal"
+			use:reveal
+			src={bandPhoto}
+			alt="Le groupe SuperMegaSuperCool Révolution"
+			width="1400"
+			height="933"
+			loading="lazy"
+		/>
 	</div>
 
 	<div class="wrap">
@@ -603,6 +616,16 @@
 		margin-right: 0.4rem;
 	}
 
+	/* ---------- BAND PHOTO ---------- */
+	.band-photo {
+		display: block;
+		width: 100%;
+		height: auto;
+		border-radius: var(--radius);
+		border: 1px solid rgba(246, 241, 255, 0.14);
+		margin: clamp(1rem, 3vw, 2.5rem) 0 clamp(2.5rem, 6vw, 5rem);
+	}
+
 	/* ---------- MANIFESTO ---------- */
 	.manifesto {
 		margin: 0;
@@ -725,6 +748,9 @@
 	.release-cover {
 		display: block;
 		width: 100%;
+		/* height:auto overrides the width/height="700" presentation hint, so the
+		   image keeps its square ratio instead of being forced to 700px tall */
+		height: auto;
 		aspect-ratio: 1 / 1;
 		object-fit: cover;
 		border-radius: calc(var(--radius) - 6px);
