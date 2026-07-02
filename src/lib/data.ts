@@ -116,6 +116,30 @@ export type Show = {
 // Ordered chronologically. `date` used to split upcoming vs. past.
 export const shows: Show[] = [
 	{
+		date: '2026-01-15',
+		label: '15 janvier 2026',
+		venue: 'L’Ampérage',
+		city: 'Grenoble (38)'
+	},
+	{
+		date: '2026-01-17',
+		label: '17 janvier 2026',
+		venue: 'Le 648 Café',
+		city: 'Marcellaz (74)'
+	},
+	{
+		date: '2026-01-18',
+		label: '18 janvier 2026',
+		venue: 'Le Brin de Zinc',
+		city: 'Barberaz (73)'
+	},
+	{
+		date: '2026-01-21',
+		label: '21 janvier 2026',
+		venue: 'Ninkasi Cordeliers',
+		city: 'Lyon (69)'
+	},
+	{
 		date: '2026-02-02',
 		label: '2 février 2026',
 		venue: 'Saint-Fons Jazz Festival',
@@ -126,6 +150,24 @@ export const shows: Show[] = [
 		label: '10 février 2026',
 		venue: 'Le Périscope',
 		city: 'Lyon (69)'
+	},
+	{
+		date: '2026-03-27',
+		label: '27 mars 2026',
+		venue: 'L’Aparté',
+		city: 'Roanne (42)'
+	},
+	{
+		date: '2026-03-28',
+		label: '28 mars 2026',
+		venue: 'La Grange des Hauts',
+		city: 'Sourcieux-les-Mines (69)'
+	},
+	{
+		date: '2026-04-02',
+		label: '2 avril 2026',
+		venue: 'Le Cirque Électrique',
+		city: 'Paris (75)'
 	},
 	{
 		date: '2026-04-03',
