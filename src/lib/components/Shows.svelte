@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { reveal } from '$lib/reveal';
-	import type { Show } from '$lib/data';
+	import { formatShowDate, type Show } from '$lib/data';
 	import MapPin from '@lucide/svelte/icons/map-pin';
 	import Ticket from '@lucide/svelte/icons/ticket';
 	import ArrowRight from '@lucide/svelte/icons/arrow-right';
@@ -37,7 +37,7 @@
 	<ul class="shows">
 		{#each upcoming as s, i (s.date + s.venue)}
 			<li class="show upcoming reveal" use:reveal={{ delay: i * 70 }}>
-				<span class="show-date">{s.label}</span>
+				<span class="show-date">{formatShowDate(s)}</span>
 				<span class="show-venue">{s.venue}</span>
 				<span class="show-city"><MapPin size={13} />{s.city}</span>
 				<span class="show-tag"><Ticket size={13} />{s.free ? 'Gratuit' : 'Billetterie'}</span>
@@ -51,7 +51,7 @@
 	<ul class="shows">
 		{#each past as s, i (s.date + s.venue)}
 			<li class="show reveal" use:reveal={{ delay: i * 70 }}>
-				<span class="show-date">{s.label}</span>
+				<span class="show-date">{formatShowDate(s)}</span>
 				<span class="show-venue">{s.venue}</span>
 				<span class="show-city"><MapPin size={13} />{s.city}</span>
 			</li>
@@ -86,7 +86,7 @@
 		gap: 1rem;
 		align-items: center;
 		padding: 1.2rem 0.4rem;
-		border-bottom: 1px solid rgba(246, 241, 255, 0.14);
+		border-bottom: 1px solid var(--hairline);
 	}
 	.show.upcoming {
 		border-left: 3px solid var(--lime);

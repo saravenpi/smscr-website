@@ -44,6 +44,9 @@
 		Single: 'https://schema.org/SingleRelease'
 	};
 
+	// Single source of truth: derive the schema genres from band.genres (capitalised).
+	const schemaGenres = band.genres.map((g) => g.charAt(0).toUpperCase() + g.slice(1));
+
 	const bandNode = {
 		'@type': 'MusicGroup',
 		'@id': bandId,
@@ -53,7 +56,7 @@
 		email: contactEmail,
 		description: band.intro,
 		image: ogImage,
-		genre: ['Jazz', 'Progressive fusion', 'Jazz psychédélique', 'Funk', 'Punk'],
+		genre: schemaGenres,
 		foundingLocation: { '@type': 'Place', name: band.city },
 		award: awards,
 		member: members.map((m) => ({ '@type': 'Person', name: m.name })),

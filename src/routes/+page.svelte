@@ -4,128 +4,23 @@
 	import Nav from '$lib/components/Nav.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Shows from '$lib/components/Shows.svelte';
+	import Music from '$lib/components/Music.svelte';
+	import Gallery from '$lib/components/Gallery.svelte';
+	import Press from '$lib/components/Press.svelte';
 	import { reveal } from '$lib/reveal';
 	import { magnetic } from '$lib/magnetic';
-	import bandPhoto from '$lib/assets/band.jpg';
-	import {
-		band,
-		members,
-		releases,
-		shows,
-		links,
-		awards,
-		heroAward,
-		featuredVideoId,
-		pressDocs,
-		contactEmail,
-		pressQuotes
-	} from '$lib/data';
+	import bandPhoto from '$lib/assets/band.jpg?enhanced';
+	import { band, members, shows, awards, heroAward } from '$lib/data';
 	import Play from '@lucide/svelte/icons/play';
 	import CalendarDays from '@lucide/svelte/icons/calendar-days';
-	import Disc3 from '@lucide/svelte/icons/disc-3';
 	import MapPin from '@lucide/svelte/icons/map-pin';
 	import Users from '@lucide/svelte/icons/users';
 	import Sparkles from '@lucide/svelte/icons/sparkles';
 	import Award from '@lucide/svelte/icons/award';
-	import Download from '@lucide/svelte/icons/download';
-	import FileText from '@lucide/svelte/icons/file-text';
-	import Mail from '@lucide/svelte/icons/mail';
-	import Camera from '@lucide/svelte/icons/camera';
-	import Quote from '@lucide/svelte/icons/quote';
-	import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
-	import X from '@lucide/svelte/icons/x';
-	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
-	import ChevronRight from '@lucide/svelte/icons/chevron-right';
-	import laundromatPhoto from '$lib/assets/photos/band-laundromat.jpg';
-	import gal01 from '$lib/assets/photos/gal-01.jpg';
-	import gal02 from '$lib/assets/photos/gal-02.jpg';
-	import gal03 from '$lib/assets/photos/gal-03.jpg';
-	import gal04 from '$lib/assets/photos/gal-04.jpg';
-	import gal05 from '$lib/assets/photos/gal-05.jpg';
-	import gal06 from '$lib/assets/photos/gal-06.jpg';
-	import gal07 from '$lib/assets/photos/gal-07.jpg';
-	import gal08 from '$lib/assets/photos/gal-08.jpg';
-	import gal09 from '$lib/assets/photos/gal-09.jpg';
-	import gal10 from '$lib/assets/photos/gal-10.jpg';
-	import gal11 from '$lib/assets/photos/gal-11.jpg';
+	import laundromatPhoto from '$lib/assets/photos/band-laundromat.jpg?enhanced';
 
 	// rotating accent per member so the line-up reads like art, not a roster
 	const accents = ['var(--magenta)', 'var(--cyan)', 'var(--lime)', 'var(--orange)', 'var(--purple)'];
-
-	// Spotify artist id parsed from the links list so the player stays in sync
-	// with data.ts. YouTube uses an explicit featured-video id (the YouTube link
-	// is a profile URL for `sameAs`, not necessarily an embeddable video).
-	const spotifyId = links
-		.find((l) => l.label === 'Spotify')
-		?.url.match(/artist\/([A-Za-z0-9]+)/)?.[1];
-	const ytId = featuredVideoId;
-
-	// Live & backstage gallery — mixed orientations; each item keeps its intrinsic
-	// ratio (w/h) so portraits and landscapes sit flush in the scroll carousel.
-	const gallery = [
-		{ src: gal01, w: 1400, h: 934, credit: 'Grrrnd Zéro', alt: 'Les cinq membres de SMSCR passent la tête derrière le bar du Grrrnd Zéro' },
-		{ src: gal02, w: 1080, h: 1080, credit: 'Mathieu Courtin', alt: 'SuperMegaSuperCool Révolution au complet sur scène' },
-		{ src: gal03, w: 933, h: 1400, credit: '', alt: 'Silhouettes du groupe dans une lumière orange psychédélique' },
-		{ src: gal04, w: 1400, h: 1120, credit: 'Gilles Vugliano / Kim Kimstoical', alt: 'Les cinq membres de SMSCR en imperméables de détective' },
-		{ src: gal05, w: 1400, h: 933, credit: '', alt: 'Le trompettiste de SMSCR chante au micro en concert' },
-		{ src: gal06, w: 1400, h: 933, credit: 'Kim Kimstoical', alt: 'Deux membres du groupe cachés dans la végétation' },
-		{ src: gal07, w: 1400, h: 933, credit: 'Kim Kimstoical', alt: 'Le guitariste de SMSCR sous une lumière rouge' },
-		{ src: gal08, w: 1400, h: 933, credit: 'Mayli Bentoumia', alt: 'Le groupe en concert baigné de lumière violette' },
-		{ src: gal09, w: 933, h: 1400, credit: 'Norah Mons', alt: 'Le bassiste de SMSCR dans un faisceau de lumière' },
-		{ src: gal10, w: 1400, h: 933, credit: '', alt: 'Le batteur de SMSCR en plein solo' },
-		{ src: gal11, w: 1400, h: 933, credit: '', alt: 'Portrait noir et blanc d’un membre du groupe' }
-	];
-
-	// ---- Fullscreen gallery lightbox. Native <dialog> gives the top layer, focus
-	// trap, Escape handling and focus restore for free. ----
-	let dialogEl: HTMLDialogElement | undefined = $state();
-	let lightboxOpen = $state(false);
-	let lightboxIndex = $state(0);
-	let swipeX = 0;
-
-	function openLightbox(i: number) {
-		lightboxIndex = i;
-		lightboxOpen = true;
-	}
-	function closeLightbox() {
-		lightboxOpen = false;
-	}
-	function nextShot() {
-		lightboxIndex = (lightboxIndex + 1) % gallery.length;
-	}
-	function prevShot() {
-		lightboxIndex = (lightboxIndex - 1 + gallery.length) % gallery.length;
-	}
-	function onLightboxKeydown(e: KeyboardEvent) {
-		if (e.key === 'ArrowRight') nextShot();
-		else if (e.key === 'ArrowLeft') prevShot();
-	}
-	function onLightboxClick(e: MouseEvent) {
-		// close on backdrop/blur clicks, but not on the image or a control
-		if (!(e.target as HTMLElement).closest('.lb-img, button')) closeLightbox();
-	}
-	function onSwipeStart(e: PointerEvent) {
-		swipeX = e.clientX;
-	}
-	function onSwipeEnd(e: PointerEvent) {
-		const dx = e.clientX - swipeX;
-		if (Math.abs(dx) > 50) (dx < 0 ? nextShot : prevShot)();
-	}
-
-	// drive the native dialog from state
-	$effect(() => {
-		if (!dialogEl) return;
-		if (lightboxOpen && !dialogEl.open) dialogEl.showModal();
-		else if (!lightboxOpen && dialogEl.open) dialogEl.close();
-	});
-	// lock background scroll while open
-	$effect(() => {
-		if (!lightboxOpen) return;
-		document.body.style.overflow = 'hidden';
-		return () => {
-			document.body.style.overflow = '';
-		};
-	});
 </script>
 
 <a class="skip-link" href="#top">Aller au contenu</a>
@@ -165,14 +60,11 @@
 </section>
 
 <div class="wrap">
-	<img
+	<enhanced:img
 		class="hero-photo"
 		src={bandPhoto}
 		alt="Le groupe SuperMegaSuperCool Révolution"
-		width="1400"
-		height="933"
-		loading="lazy"
-		decoding="async"
+		sizes="(max-width: 1264px) 100vw, 1200px"
 	/>
 </div>
 
@@ -211,13 +103,11 @@
 
 	<div class="wrap">
 		<figure class="band-fig reveal" use:reveal>
-			<img
+			<enhanced:img
 				class="band-photo"
 				src={laundromatPhoto}
 				alt="Les cinq membres de SuperMegaSuperCool Révolution assis sur les machines d’une laverie"
-				width="2000"
-				height="1333"
-				loading="lazy"
+				sizes="(max-width: 1264px) 100vw, 1200px"
 			/>
 			<figcaption class="band-credit">© Kim Kimstoical</figcaption>
 		</figure>
@@ -260,140 +150,9 @@
 	accent="var(--cyan)"
 />
 
-<!-- MUSIC -->
-<section id="musique">
-	<div class="wrap">
-		<div class="reveal" use:reveal>
-			<p class="eyebrow"><Disc3 size={13} />Discographie</p>
-			<h2 class="section-title">La musique</h2>
-		</div>
-		{#if spotifyId || ytId}
-			<div class="players reveal" use:reveal={{ delay: 80 }}>
-				{#if spotifyId}
-					<iframe
-						class="player player-spotify"
-						title="{band.name} sur Spotify"
-						src="https://open.spotify.com/embed/artist/{spotifyId}?theme=0"
-						loading="lazy"
-						allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-						allowfullscreen
-					></iframe>
-				{/if}
-				{#if ytId}
-					<div class="player player-video">
-						<iframe
-							title="{band.name} sur YouTube"
-							src="https://www.youtube-nocookie.com/embed/{ytId}"
-							loading="lazy"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							allowfullscreen
-						></iframe>
-					</div>
-				{/if}
-			</div>
-		{/if}
-		<div class="releases">
-			{#each releases as r, i (r.title)}
-				<article class="release reveal" use:reveal={{ delay: i * 100 }}>
-					{#if r.cover}
-						<img
-							class="release-cover"
-							src={r.cover}
-							alt="Pochette de « {r.title} »"
-							loading="lazy"
-							width="700"
-							height="700"
-						/>
-					{/if}
-					<div class="release-meta">
-						<span class="release-type">{r.type}</span>
-						<span class="release-year">{r.year}</span>
-					</div>
-					<h3 class="release-title">{r.title}</h3>
-					{#if r.label}<p class="release-label">Label · {r.label}</p>{/if}
-					{#if r.note}<p class="release-note">{r.note}</p>{/if}
-					{#if r.link}
-						<a class="btn btn-primary sm" href={r.link} target="_blank" rel="noopener">
-							<Disc3 size={16} />
-							Écouter sur Bandcamp
-						</a>
-					{/if}
-				</article>
-			{/each}
-		</div>
-	</div>
-</section>
+<Music />
 
-<!-- GALERIE -->
-<section id="galerie" class="gallery-section">
-	<div class="wrap">
-		<div class="reveal" use:reveal>
-			<p class="eyebrow"><Camera size={13} />En images</p>
-			<h2 class="section-title">Sur scène &amp; en coulisses</h2>
-		</div>
-	</div>
-	<ul class="gallery" aria-label="Galerie photo du groupe (défilement horizontal)">
-		{#each gallery as ph, i (i)}
-			<li class="shot">
-				<button
-					type="button"
-					class="shot-btn"
-					onclick={() => openLightbox(i)}
-					aria-label="Agrandir : {ph.alt}"
-				>
-					<img
-						src={ph.src}
-						alt={ph.alt}
-						width={ph.w}
-						height={ph.h}
-						loading="lazy"
-						decoding="async"
-						style="aspect-ratio: {ph.w} / {ph.h}"
-					/>
-					{#if ph.credit}<span class="shot-credit">© {ph.credit}</span>{/if}
-				</button>
-			</li>
-		{/each}
-	</ul>
-	<div class="wrap">
-		<p class="gallery-credits">
-			Photos&nbsp;: Kim Kimstoical, Mathieu Courtin, Mayli Bentoumia, Norah Mons, Gilles Vugliano
-			· live à Grrrnd Zéro &amp; ailleurs.
-		</p>
-	</div>
-</section>
-
-<!-- GALLERY LIGHTBOX -->
-<dialog
-	class="lightbox"
-	bind:this={dialogEl}
-	aria-label="Galerie en plein écran"
-	onclose={() => (lightboxOpen = false)}
-	onclick={onLightboxClick}
-	onkeydown={onLightboxKeydown}
-	onpointerdown={onSwipeStart}
-	onpointerup={onSwipeEnd}
->
-	{#if lightboxOpen}
-		{@const ph = gallery[lightboxIndex]}
-		<img class="lb-bg" src={ph.src} alt="" aria-hidden="true" />
-		<div class="lb-scrim"></div>
-		<figure class="lb-stage">
-			<img class="lb-img" src={ph.src} alt={ph.alt} />
-			{#if ph.credit}<figcaption class="lb-credit">© {ph.credit}</figcaption>{/if}
-		</figure>
-		<button class="lb-btn lb-close" type="button" onclick={closeLightbox} aria-label="Fermer">
-			<X size={22} />
-		</button>
-		<button class="lb-btn lb-prev" type="button" onclick={prevShot} aria-label="Photo précédente">
-			<ChevronLeft size={26} />
-		</button>
-		<button class="lb-btn lb-next" type="button" onclick={nextShot} aria-label="Photo suivante">
-			<ChevronRight size={26} />
-		</button>
-		<p class="lb-counter">{lightboxIndex + 1} / {gallery.length}</p>
-	{/if}
-</dialog>
+<Gallery />
 
 <!-- LIVE -->
 <section id="live" class="live-section">
@@ -406,73 +165,7 @@
 	</div>
 </section>
 
-<!-- PRESSE & BOOKING -->
-<section id="presse" class="press-section">
-	<div class="wrap">
-		<div class="reveal" use:reveal>
-			<p class="eyebrow"><FileText size={13} />Espace pro</p>
-			<h2 class="section-title">Presse &amp; booking</h2>
-			<p class="press-lead">
-				Programmateur·rice ou journaliste&nbsp;? Le dossier de presse réunit bio, visuels,
-				discographie, concerts et revue de presse — tout ce qu'il faut pour parler du groupe et le
-				programmer.
-			</p>
-		</div>
-
-		<h3 class="press-subhead reveal" use:reveal>Ils en parlent</h3>
-		<div class="press-quotes">
-			{#each pressQuotes as q (q.outlet + (q.author ?? ''))}
-				<figure class="quote reveal" use:reveal>
-					<Quote class="quote-mark" size={20} strokeWidth={2.25} />
-					<blockquote>{q.quote}</blockquote>
-					<figcaption class="quote-by">
-						{#if q.author}<span class="quote-author">{q.author}</span>{/if}
-						{#if q.url}
-							<a class="quote-outlet" href={q.url} target="_blank" rel="noopener">
-								{q.outlet}<ArrowUpRight size={13} />
-							</a>
-						{:else}
-							<span class="quote-outlet">{q.outlet}</span>
-						{/if}
-					</figcaption>
-				</figure>
-			{/each}
-		</div>
-
-		<h3 class="press-subhead reveal" use:reveal>À télécharger</h3>
-		<div class="press-grid">
-			{#each pressDocs as doc, i (doc.title)}
-				<a
-					class="press-card reveal"
-					use:reveal={{ delay: i * 90 }}
-					href={doc.href ?? `${base}${doc.file}`}
-					download={doc.file ? doc.downloadAs : undefined}
-					target={doc.href ? '_blank' : undefined}
-					rel={doc.href ? 'noopener' : undefined}
-				>
-					<span class="press-icon"><Download size={22} strokeWidth={2.25} /></span>
-					<span class="press-text">
-						<span class="press-title">{doc.title}</span>
-						<span class="press-desc">{doc.desc}</span>
-						<span class="press-meta">{doc.meta}</span>
-					</span>
-				</a>
-			{/each}
-			<a
-				class="press-card press-contact reveal"
-				use:reveal={{ delay: pressDocs.length * 90 }}
-				href="mailto:{contactEmail}?subject=Booking%20SMSCR"
-			>
-				<span class="press-icon"><Mail size={22} strokeWidth={2.25} /></span>
-				<span class="press-text">
-					<span class="press-title">Booking</span>
-					<span class="press-desc">Une date, une prog, une interview&nbsp;? Écrivez-nous.</span>
-					<span class="press-meta">{contactEmail}</span>
-				</span>
-			</a>
-		</div>
-	</div>
-</section>
+<Press />
 
 <Footer />
 
@@ -617,7 +310,7 @@
 		width: 100%;
 		height: auto;
 		border-radius: var(--radius);
-		border: 1px solid rgba(246, 241, 255, 0.14);
+		border: 1px solid var(--hairline);
 	}
 	.band-credit {
 		margin: 0.5rem 0 0;
@@ -648,12 +341,12 @@
 		display: grid;
 		gap: 0;
 		margin-top: 2.4rem;
-		border-top: 1px solid rgba(246, 241, 255, 0.14);
+		border-top: 1px solid var(--hairline);
 	}
 	.member {
 		position: relative;
 		padding: clamp(1.4rem, 4vw, 2.8rem) 0;
-		border-bottom: 1px solid rgba(246, 241, 255, 0.14);
+		border-bottom: 1px solid var(--hairline);
 		transition: padding-left 0.35s var(--ease);
 	}
 	.member-role {
@@ -688,255 +381,6 @@
 		color: var(--c);
 	}
 
-	/* ---------- MUSIC ---------- */
-	.players {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 1.5rem;
-		margin: 2rem 0 2.6rem;
-		align-items: start;
-	}
-	.player {
-		width: 100%;
-		border: 0;
-		border-radius: var(--radius);
-	}
-	.player-spotify {
-		height: 352px;
-	}
-	.player-video {
-		position: relative;
-		aspect-ratio: 16 / 9;
-		overflow: hidden;
-	}
-	.player-video iframe {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		border: 0;
-	}
-	/* Side-by-side (2-col) layout: pin the video to the Spotify embed's fixed
-	   352px so the grid row is even — otherwise the shorter 16:9 video leaves a
-	   gap beneath it. Stacked on narrow screens, the video keeps its 16:9 ratio. */
-	@media (min-width: 700px) {
-		.player-video {
-			aspect-ratio: auto;
-			height: 352px;
-		}
-	}
-	.releases {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		gap: 1.5rem;
-		margin-top: 2rem;
-	}
-	.release {
-		display: flex;
-		flex-direction: column;
-		border: 1px solid rgba(246, 241, 255, 0.16);
-		border-radius: var(--radius);
-		padding: clamp(1.4rem, 3vw, 2rem);
-		background: linear-gradient(160deg, rgba(139, 47, 255, 0.14), rgba(10, 4, 16, 0.2));
-		transition:
-			transform 0.25s var(--ease),
-			border-color 0.25s var(--ease);
-	}
-	/* push the CTA to the bottom so buttons align across a row of equal-height cards */
-	.release .btn {
-		margin-top: auto;
-		align-self: flex-start;
-	}
-	.release:hover {
-		transform: translateY(-4px);
-		border-color: rgba(255, 46, 136, 0.5);
-	}
-	.release-cover {
-		display: block;
-		width: 100%;
-		/* height:auto overrides the width/height="700" presentation hint, so the
-		   image keeps its square ratio instead of being forced to 700px tall */
-		height: auto;
-		aspect-ratio: 1 / 1;
-		object-fit: cover;
-		border-radius: calc(var(--radius) - 6px);
-		margin-bottom: 1.1rem;
-	}
-	.release-meta {
-		display: flex;
-		justify-content: space-between;
-		font-weight: 700;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		margin-bottom: 1rem;
-	}
-	.release-type {
-		color: var(--magenta);
-	}
-	.release-year {
-		color: var(--ink-dim);
-	}
-	.release-title {
-		font-size: clamp(1.3rem, 2.5vw, 1.6rem);
-		font-weight: 700;
-		margin-bottom: 0.5rem;
-	}
-	.release-label {
-		color: var(--cyan);
-		font-size: 0.85rem;
-		margin: 0 0 0.7rem;
-	}
-	.release-note {
-		color: var(--ink-dim);
-		font-style: italic;
-		margin: 0 0 1rem;
-	}
-
-	/* ---------- PRESSE & BOOKING ---------- */
-	.press-lead {
-		max-width: 60ch;
-		color: var(--ink-dim);
-		font-size: 1.1rem;
-		margin: 0 0 2.4rem;
-	}
-	.press-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 1.5rem;
-	}
-	.press-card {
-		display: flex;
-		align-items: center;
-		gap: 1.1rem;
-		padding: clamp(1.3rem, 3vw, 1.8rem);
-		border: 1px solid rgba(246, 241, 255, 0.16);
-		border-radius: var(--radius);
-		background: linear-gradient(160deg, rgba(139, 47, 255, 0.14), rgba(10, 4, 16, 0.2));
-		text-decoration: none;
-		color: var(--ink);
-		transition:
-			transform 0.25s var(--ease),
-			border-color 0.25s var(--ease);
-	}
-	.press-card:hover {
-		transform: translateY(-4px);
-		border-color: rgba(255, 46, 136, 0.5);
-	}
-	.press-card:focus-visible {
-		outline: 2px solid var(--cyan);
-		outline-offset: 3px;
-	}
-	.press-icon {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		flex-shrink: 0;
-		width: 52px;
-		height: 52px;
-		border-radius: 14px;
-		background: var(--magenta);
-		color: #0a0410;
-		transition: transform 0.25s var(--ease);
-	}
-	.press-contact .press-icon {
-		background: var(--lime);
-	}
-	.press-card:hover .press-icon {
-		transform: translateY(-2px) rotate(-4deg);
-	}
-	.press-text {
-		display: flex;
-		flex-direction: column;
-		gap: 0.22rem;
-		min-width: 0;
-	}
-	.press-title {
-		font-family: var(--display);
-		font-weight: 700;
-		font-size: 1.2rem;
-	}
-	.press-desc {
-		color: var(--ink-dim);
-		font-size: 0.95rem;
-		line-height: 1.4;
-	}
-	.press-meta {
-		margin-top: 0.15rem;
-		font-size: 0.78rem;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		color: var(--cyan);
-		/* long email must not overflow the card */
-		overflow-wrap: anywhere;
-	}
-
-	/* ---------- PRESS QUOTES ---------- */
-	.press-subhead {
-		font-family: var(--display);
-		font-weight: 700;
-		font-size: 1.2rem;
-		margin: 0 0 1.1rem;
-	}
-	.press-quotes {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-		gap: 1.2rem;
-		margin: 0 0 2.6rem;
-	}
-	.quote {
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.9rem;
-		padding: clamp(1.3rem, 3vw, 1.7rem);
-		border: 1px solid rgba(246, 241, 255, 0.16);
-		border-radius: var(--radius);
-		background: linear-gradient(160deg, rgba(34, 224, 255, 0.09), rgba(10, 4, 16, 0.2));
-	}
-	.quote :global(.quote-mark) {
-		color: var(--cyan);
-		flex-shrink: 0;
-	}
-	.quote blockquote {
-		margin: 0;
-		font-size: 1rem;
-		line-height: 1.55;
-		color: var(--ink);
-	}
-	.quote-by {
-		margin-top: auto;
-		display: flex;
-		flex-direction: column;
-		gap: 0.15rem;
-	}
-	.quote-author {
-		font-family: var(--display);
-		font-weight: 700;
-		font-size: 1.02rem;
-	}
-	.quote-outlet {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35em;
-		width: fit-content;
-		font-size: 0.8rem;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		color: var(--cyan);
-		text-decoration: none;
-	}
-	a.quote-outlet:hover {
-		color: var(--lime);
-	}
-	a.quote-outlet:focus-visible {
-		outline: 2px solid var(--cyan);
-		outline-offset: 3px;
-		border-radius: 4px;
-	}
-
 	/* ---------- HERO PHOTO ---------- */
 	.hero-photo {
 		display: block;
@@ -945,230 +389,9 @@
 		aspect-ratio: 1400 / 933;
 		object-fit: cover;
 		border-radius: var(--radius);
-		border: 1px solid rgba(246, 241, 255, 0.14);
+		border: 1px solid var(--hairline);
 		/* breathing room below the hero photo before the scrolling marquee */
 		margin: clamp(1rem, 3vw, 2rem) 0 clamp(2.5rem, 6vw, 4.5rem);
-	}
-
-	/* ---------- GALERIE ---------- */
-	.gallery-section {
-		padding-bottom: clamp(40px, 7vw, 90px);
-	}
-	.gallery {
-		list-style: none;
-		margin: 2rem 0 1.4rem;
-		/* full-bleed horizontal carousel with its own gutter padding */
-		padding: 0.4rem var(--gutter);
-		display: flex;
-		gap: 1rem;
-		overflow-x: auto;
-		scroll-snap-type: x mandatory;
-		-webkit-overflow-scrolling: touch;
-		scrollbar-width: none;
-	}
-	.gallery::-webkit-scrollbar {
-		display: none;
-	}
-	.shot {
-		position: relative;
-		flex: 0 0 auto;
-		height: clamp(240px, 42vh, 420px);
-		scroll-snap-align: center;
-		border-radius: var(--radius);
-		overflow: hidden;
-		border: 1px solid rgba(246, 241, 255, 0.14);
-	}
-	.shot img {
-		display: block;
-		height: 100%;
-		width: auto;
-		max-width: none;
-		object-fit: cover;
-		transition: transform 0.4s var(--ease);
-	}
-	.shot:hover img {
-		transform: scale(1.04);
-	}
-	.shot-credit {
-		position: absolute;
-		inset: auto 0 0 0;
-		padding: 1.4rem 0.7rem 0.55rem;
-		font-size: 0.7rem;
-		letter-spacing: 0.05em;
-		color: var(--ink);
-		background: linear-gradient(transparent, rgba(10, 4, 16, 0.8));
-		opacity: 0;
-		transition: opacity 0.3s var(--ease);
-	}
-	.shot:hover .shot-credit,
-	.shot:focus-within .shot-credit {
-		opacity: 1;
-	}
-	.gallery-credits {
-		color: var(--ink-dim);
-		font-size: 0.85rem;
-		margin: 0;
-	}
-
-	/* ---------- LIGHTBOX ---------- */
-	.shot-btn {
-		display: block;
-		height: 100%;
-		padding: 0;
-		border: 0;
-		background: none;
-		cursor: zoom-in;
-		border-radius: inherit;
-	}
-	.shot-btn:focus-visible {
-		outline: 2px solid var(--cyan);
-		outline-offset: 3px;
-	}
-
-	.lightbox {
-		position: fixed;
-		inset: 0;
-		width: 100vw;
-		height: 100vh;
-		height: 100dvh;
-		max-width: none;
-		max-height: none;
-		margin: 0;
-		padding: 0;
-		border: 0;
-		background: transparent;
-		overflow: hidden;
-	}
-	.lightbox::backdrop {
-		background: rgba(6, 2, 10, 0.72);
-		backdrop-filter: blur(6px);
-	}
-	.lb-bg {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		filter: blur(44px) brightness(0.42) saturate(1.25);
-		transform: scale(1.2);
-	}
-	.lb-scrim {
-		position: absolute;
-		inset: 0;
-		background: radial-gradient(130% 130% at 50% 45%, transparent 30%, rgba(6, 2, 10, 0.62));
-	}
-	.lb-stage {
-		position: absolute;
-		inset: 0;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 0.9rem;
-		/* extra top/bottom room reserved for the close button & counter */
-		padding: clamp(3.4rem, 8vh, 4.5rem) clamp(1rem, 5vw, 3.5rem);
-	}
-	.lb-img {
-		max-width: min(94vw, 1400px);
-		max-height: 78vh;
-		max-height: 78dvh;
-		width: auto;
-		height: auto;
-		object-fit: contain;
-		border-radius: 10px;
-		box-shadow: 0 30px 90px rgba(0, 0, 0, 0.65);
-	}
-	.lb-credit {
-		margin: 0;
-		color: var(--ink-dim);
-		font-size: 0.82rem;
-		letter-spacing: 0.03em;
-		text-align: center;
-	}
-	.lb-btn {
-		position: absolute;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: clamp(40px, 10vw, 46px);
-		height: clamp(40px, 10vw, 46px);
-		border-radius: 999px;
-		border: 1px solid rgba(246, 241, 255, 0.25);
-		background: rgba(10, 4, 16, 0.5);
-		backdrop-filter: blur(8px);
-		color: var(--ink);
-		cursor: pointer;
-		transition:
-			background 0.2s var(--ease),
-			border-color 0.2s var(--ease),
-			transform 0.15s var(--ease);
-	}
-	.lb-btn:hover {
-		background: rgba(255, 46, 136, 0.25);
-		border-color: var(--magenta);
-	}
-	.lb-btn:focus-visible {
-		outline: 2px solid var(--cyan);
-		outline-offset: 3px;
-	}
-	.lb-close {
-		top: clamp(0.7rem, 2vw, 1.4rem);
-		right: clamp(0.7rem, 2vw, 1.4rem);
-	}
-	.lb-prev,
-	.lb-next {
-		top: 50%;
-		transform: translateY(-50%);
-	}
-	.lb-prev {
-		left: clamp(0.5rem, 2vw, 1.6rem);
-	}
-	.lb-next {
-		right: clamp(0.5rem, 2vw, 1.6rem);
-	}
-	.lb-prev:hover,
-	.lb-next:hover {
-		transform: translateY(-50%) scale(1.08);
-	}
-	.lb-counter {
-		position: absolute;
-		bottom: clamp(0.8rem, 2.5vw, 1.6rem);
-		left: 50%;
-		transform: translateX(-50%);
-		margin: 0;
-		font-size: 0.8rem;
-		font-weight: 700;
-		letter-spacing: 0.12em;
-		color: var(--ink);
-		background: rgba(10, 4, 16, 0.5);
-		border: 1px solid rgba(246, 241, 255, 0.18);
-		padding: 0.3em 0.9em;
-		border-radius: 999px;
-		backdrop-filter: blur(8px);
-	}
-	.lightbox[open] {
-		animation: lbFade 0.25s var(--ease);
-	}
-	.lightbox[open] .lb-img {
-		animation: lbZoom 0.3s var(--ease);
-	}
-	@keyframes lbFade {
-		from {
-			opacity: 0;
-		}
-	}
-	@keyframes lbZoom {
-		from {
-			transform: scale(0.94);
-			opacity: 0;
-		}
-	}
-	@media (prefers-reduced-motion: reduce) {
-		.lightbox[open],
-		.lightbox[open] .lb-img {
-			animation: none;
-		}
 	}
 
 	/* ---------- RESPONSIVE ---------- */

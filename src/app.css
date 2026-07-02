@@ -8,6 +8,8 @@
 	--cyan: #22e0ff;
 	--orange: #ff7a1a;
 	--purple: #8b2fff;
+	--hairline: rgba(246, 241, 255, 0.14);
+	--hairline-strong: rgba(246, 241, 255, 0.16);
 
 	--display: 'Syne', system-ui, sans-serif;
 	--body: 'Space Grotesk', system-ui, sans-serif;
@@ -119,6 +121,13 @@ a {
 	color: inherit;
 }
 
+/* <enhanced:img> wraps the <img> in a <picture>. Make that wrapper transparent
+   to layout so the existing img-targeted rules (width/height/object-fit) apply
+   exactly as before — the browser still picks the right <source> either way. */
+picture {
+	display: contents;
+}
+
 /* skip-to-content link — visible only when focused via keyboard */
 .skip-link {
 	position: absolute;
@@ -192,6 +201,21 @@ h3 {
 	border-color: var(--lime);
 	color: var(--lime);
 	transform: translateY(-2px);
+}
+
+/* shared card surface: bordered gradient panel that lifts on hover
+   (used by discography releases and press/booking cards) */
+.card {
+	border: 1px solid var(--hairline-strong);
+	border-radius: var(--radius);
+	background: linear-gradient(160deg, rgba(139, 47, 255, 0.14), rgba(10, 4, 16, 0.2));
+	transition:
+		transform 0.25s var(--ease),
+		border-color 0.25s var(--ease);
+}
+.card:hover {
+	transform: translateY(-4px);
+	border-color: rgba(255, 46, 136, 0.5);
 }
 
 /* ---------- buttons (shared: home + error page) ---------- */

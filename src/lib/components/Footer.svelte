@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import type { Component } from 'svelte';
 	import { reveal } from '$lib/reveal';
-	import { band, links } from '$lib/data';
+	import { band, links, contactEmail } from '$lib/data';
 	import Instagram from '$lib/components/Instagram.svelte';
 	import Disc3 from '@lucide/svelte/icons/disc-3';
 	import AudioLines from '@lucide/svelte/icons/audio-lines';
@@ -12,8 +13,7 @@
 	import Mail from '@lucide/svelte/icons/mail';
 
 	// icon per streaming/social platform (Lucide dropped brand icons; Instagram uses our own glyph)
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const socialIcon: Record<string, any> = {
+	const socialIcon: Record<string, Component<{ size?: number }>> = {
 		Bandcamp: Disc3,
 		Spotify: AudioLines,
 		Deezer: Radio,
@@ -43,9 +43,9 @@
 					</a>
 				{/each}
 			</div>
-			<a class="footer-mail" href="mailto:contact@smscr.fr">
+			<a class="footer-mail" href={`mailto:${contactEmail}`}>
 				<Mail size={18} />
-				contact@smscr.fr
+				{contactEmail}
 			</a>
 		</div>
 		<div class="footer-meta reveal" use:reveal={{ delay: 120 }}>
@@ -61,7 +61,7 @@
 
 <style>
 	footer {
-		border-top: 1px solid rgba(246, 241, 255, 0.14);
+		border-top: 1px solid var(--hairline);
 		padding: clamp(56px, 8vw, 104px) 0 clamp(40px, 5vw, 56px);
 	}
 	.footer-inner {

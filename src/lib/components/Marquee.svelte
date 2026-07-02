@@ -16,13 +16,14 @@
 			<span class="dot">✦</span>
 		{/each}
 	</div>
+	<span class="sr-only">{items.join(' · ')}</span>
 </div>
 
 <style>
 	.marquee {
 		overflow: hidden;
 		white-space: nowrap;
-		border-block: 2px solid rgba(246, 241, 255, 0.14);
+		border-block: 2px solid var(--hairline);
 		padding: 0.55em 0;
 		background: rgba(10, 4, 16, 0.35);
 		/* fade the edges so text dissolves rather than clips */
@@ -76,5 +77,17 @@
 		.track {
 			animation: none;
 		}
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+		border: 0;
 	}
 </style>
