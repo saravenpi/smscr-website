@@ -9,6 +9,17 @@ import alaiseCover from './assets/covers/alaise.jpg';
 export const siteUrl = 'https://smscr.fr';
 export const contactEmail = 'contact@smscr.fr';
 
+// Concise <meta description> / OG / Twitter summary (~150 chars). `band.intro`
+// is written for humans and runs too long for search snippets (Google truncates
+// around 155 chars), so we keep a dedicated, tighter line for metadata.
+export const metaDescription =
+	'SuperMegaSuperCool Révolution (SMSCR) — quintette de jazz psychédélique et prog-fusion de Lyon. Écoutez la musique, découvrez le groupe et les dates de concert.';
+
+// YouTube video featured in the on-site player. Kept separate from the YouTube
+// entry in `links` (which is the band's public profile for the footer + SEO
+// `sameAs`): a channel URL and a single embeddable clip are different things.
+export const featuredVideoId = '-Pk-eKO_yDA';
+
 export const band = {
 	name: 'SuperMegaSuperCool Révolution',
 	short: 'SMSCR',
@@ -79,8 +90,8 @@ export const releases: Release[] = [
 		type: 'EP',
 		year: '2026',
 		cover: inspektherCover,
-		note: 'Le film noir le plus funky de l’année.',
-		link: 'https://supermegasupercoolrevolution.bandcamp.com'
+		note: 'Le film noir le plus funky de l’année. Bientôt disponible.'
+		// No `link` yet — the EP isn't on Bandcamp, so no "Écouter" button is shown.
 	},
 	{
 		title: 'À l’aise avec SuperMegaSuperCool Révolution',
@@ -237,7 +248,7 @@ export const links: Link[] = [
 	{ label: 'Spotify', url: 'https://open.spotify.com/artist/1X1vH2wpLqAl3v2O16WQGu' },
 	{ label: 'Deezer', url: 'https://www.deezer.com/artist/221241275' },
 	{ label: 'Instagram', url: 'https://www.instagram.com/supermegasupercoolrevolution/' },
-	{ label: 'YouTube', url: 'https://www.youtube.com/watch?v=-Pk-eKO_yDA' }
+	{ label: 'YouTube', url: 'https://www.youtube.com/@SuperMegaSuperCoolRevolution' }
 ];
 
 export const awards = ['Lauréats Un Doua Jazz 2024', 'Accompagnement Ninkasi Music Lab'];

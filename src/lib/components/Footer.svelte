@@ -21,7 +21,9 @@
 		YouTube: Film
 	};
 
-	let year = $state(new Date().getFullYear());
+	// Build year for SSR/hydration parity (see Shows.svelte); onMount bumps it to
+	// the real current year so the © line self-corrects on an aging deploy.
+	let year = $state(Number(__BUILD_DATE__.slice(0, 4)));
 	onMount(() => {
 		year = new Date().getFullYear();
 	});

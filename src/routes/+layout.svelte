@@ -12,7 +12,17 @@
 	import { dev } from '$app/environment';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import favicon from '$lib/assets/favicon.svg';
-	import { band, members, releases, shows, links, awards, siteUrl, contactEmail } from '$lib/data';
+	import {
+		band,
+		members,
+		releases,
+		shows,
+		links,
+		awards,
+		siteUrl,
+		contactEmail,
+		metaDescription
+	} from '$lib/data';
 
 	let { children } = $props();
 
@@ -20,7 +30,7 @@
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
 
 	const title = `${band.name} (SMSCR) — jazz psychédélique · Lyon`;
-	const description = band.intro;
+	const description = metaDescription;
 	const canonical = `${siteUrl}/`;
 	const ogImage = `${siteUrl}/og.jpg`;
 
@@ -68,27 +78,37 @@
 	};
 
 	// One MusicEvent per gig so Google can surface them as event rich results.
-	// `offers` (even minimal) and `endDate` for multi-day gigs are what Google
-	// needs to render the event rich result — we only assert what we actually know
-	// (a link + availability; price 0 for free gigs), never a fabricated price.
-	const eventNodes = shows.map((s) => ({
-		'@type': 'MusicEvent',
-		name: `${band.name} · ${s.venue}`,
-		startDate: s.date,
-		...(s.endDate ? { endDate: s.endDate } : {}),
-		eventStatus: 'https://schema.org/EventScheduled',
-		eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-		location: { '@type': 'Place', name: s.venue, address: s.city },
-		performer: { '@id': bandId },
-		url: s.link ?? canonical,
-		...(s.free ? { isAccessibleForFree: true } : {}),
-		offers: {
-			'@type': 'Offer',
+	// `endDate` (multi-day festivals) and `offers` are what Google needs for the
+	// rich result — but only for gigs that haven't happened yet: asserting an
+	// available/in-stock offer on a show we already played is false. We compare
+	// against the build date (inlined identically server- and client-side, so the
+	// <head> JSON-LD doesn't diverge on hydration) and only emit what we know
+	// (link + availability; price 0 for free gigs), never a fabricated price.
+	const eventNodes = shows.map((s) => {
+		const isPast = (s.endDate ?? s.date) < __BUILD_DATE__;
+		return {
+			'@type': 'MusicEvent',
+			name: `${band.name} · ${s.venue}`,
+			startDate: s.date,
+			...(s.endDate ? { endDate: s.endDate } : {}),
+			eventStatus: 'https://schema.org/EventScheduled',
+			eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+			location: { '@type': 'Place', name: s.venue, address: s.city },
+			performer: { '@id': bandId },
 			url: s.link ?? canonical,
-			availability: 'https://schema.org/InStock',
-			...(s.free ? { price: '0', priceCurrency: 'EUR' } : {})
-		}
-	}));
+			...(s.free ? { isAccessibleForFree: true } : {}),
+			...(isPast
+				? {}
+				: {
+						offers: {
+							'@type': 'Offer',
+							url: s.link ?? canonical,
+							availability: 'https://schema.org/InStock',
+							...(s.free ? { price: '0', priceCurrency: 'EUR' } : {})
+						}
+					})
+		};
+	});
 
 	const jsonLd = JSON.stringify({
 		'@context': 'https://schema.org',

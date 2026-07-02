@@ -82,42 +82,7 @@
 		gap: 0.85rem;
 		justify-content: center;
 	}
-	.btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.55em;
-		text-decoration: none;
-		font-weight: 700;
-		padding: 0.8em 1.6em;
-		border-radius: 999px;
-		transition:
-			transform 0.15s var(--ease),
-			box-shadow 0.15s var(--ease),
-			border-color 0.2s var(--ease);
-	}
-	.btn:hover {
-		transform: translateY(-2px);
-	}
-	.btn-primary {
-		background: var(--magenta);
-		color: #0a0410;
-		box-shadow: 0 6px 0 rgba(255, 46, 136, 0.35);
-	}
-	.btn-primary:hover {
-		box-shadow: 0 9px 0 rgba(255, 46, 136, 0.3);
-	}
-	.btn-ghost {
-		border: 2px solid rgba(246, 241, 255, 0.4);
-		color: var(--ink);
-	}
-	.btn-ghost:hover {
-		border-color: var(--ink);
-	}
-	.btn:focus-visible {
-		outline: 2px solid var(--cyan);
-		outline-offset: 3px;
-	}
+	/* button styles are shared and live in app.css */
 
 	@media (max-width: 520px) {
 		.error-cta {

@@ -12,9 +12,12 @@
 		moreHref
 	}: { shows: Show[]; pastLimit?: number; moreHref?: string } = $props();
 
-	// The site is prerendered; onMount re-reads the real date so the upcoming/past
-	// split stays correct between deploys.
-	let todayISO = $state(new Date().toISOString().slice(0, 10));
+	// Start from the build date (inlined identically into the server and client
+	// bundles) so the prerendered HTML and the hydrating client agree — reading
+	// `new Date()` here would diverge once the build ages by a day and cause a
+	// hydration mismatch. After hydration, onMount refreshes to the real "today"
+	// so the upcoming/past split stays correct between deploys.
+	let todayISO = $state(__BUILD_DATE__);
 	onMount(() => {
 		todayISO = new Date().toISOString().slice(0, 10);
 	});

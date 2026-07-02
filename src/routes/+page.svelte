@@ -7,7 +7,7 @@
 	import { reveal } from '$lib/reveal';
 	import { magnetic } from '$lib/magnetic';
 	import bandPhoto from '$lib/assets/band.jpg';
-	import { band, members, releases, shows, links, awards } from '$lib/data';
+	import { band, members, releases, shows, links, awards, featuredVideoId } from '$lib/data';
 	import Play from '@lucide/svelte/icons/play';
 	import CalendarDays from '@lucide/svelte/icons/calendar-days';
 	import Disc3 from '@lucide/svelte/icons/disc-3';
@@ -19,12 +19,13 @@
 	// rotating accent per member so the line-up reads like art, not a roster
 	const accents = ['var(--magenta)', 'var(--cyan)', 'var(--lime)', 'var(--orange)', 'var(--purple)'];
 
-	// embed ids parsed from the links list so the on-site players stay in sync with data.ts
+	// Spotify artist id parsed from the links list so the player stays in sync
+	// with data.ts. YouTube uses an explicit featured-video id (the YouTube link
+	// is a profile URL for `sameAs`, not necessarily an embeddable video).
 	const spotifyId = links
 		.find((l) => l.label === 'Spotify')
 		?.url.match(/artist\/([A-Za-z0-9]+)/)?.[1];
-	const ytUrl = links.find((l) => l.label === 'YouTube')?.url ?? '';
-	const ytId = ytUrl.match(/[?&]v=([^&]+)/)?.[1] ?? ytUrl.match(/youtu\.be\/([^?]+)/)?.[1];
+	const ytId = featuredVideoId;
 </script>
 
 <a class="skip-link" href="#top">Aller au contenu</a>
@@ -292,45 +293,7 @@
 		gap: 0.5rem;
 	}
 
-	.btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.55em;
-		text-decoration: none;
-		font-weight: 700;
-		padding: 0.8em 1.6em;
-		border-radius: 999px;
-		transition:
-			transform 0.15s var(--ease),
-			box-shadow 0.15s var(--ease),
-			background 0.2s var(--ease);
-	}
-	.btn.sm {
-		padding: 0.65em 1.25em;
-		font-size: 0.9rem;
-	}
-	.btn:hover {
-		transform: translateY(-2px);
-	}
-	.btn:active {
-		transform: translateY(0);
-	}
-	.btn-primary {
-		background: var(--magenta);
-		color: #0a0410;
-		box-shadow: 0 6px 0 rgba(255, 46, 136, 0.35);
-	}
-	.btn-primary:hover {
-		box-shadow: 0 9px 0 rgba(255, 46, 136, 0.3);
-	}
-	.btn-ghost {
-		border: 2px solid rgba(246, 241, 255, 0.4);
-		color: var(--ink);
-	}
-	.btn-ghost:hover {
-		border-color: var(--ink);
-	}
+	/* button styles are shared and live in app.css */
 
 	/* ---------- ABOUT ---------- */
 	.about {
@@ -348,6 +311,14 @@
 	.about-body strong {
 		color: var(--lime);
 		font-weight: 700;
+	}
+	/* This heading sits in the narrow left column of the about grid, so the global
+	   .section-title size (up to 4.4rem) overflowed and hyphenated mid-word
+	   (« co-pains », « fron-tière »). Size it to its column and disable
+	   hyphenation — the <br> then gives the intended clean two-line reading. */
+	.about-head .section-title {
+		font-size: clamp(2rem, 3.8vw, 3.4rem);
+		hyphens: none;
 	}
 	.influences {
 		display: flex;
@@ -488,6 +459,15 @@
 		height: 100%;
 		border: 0;
 	}
+	/* Side-by-side (2-col) layout: pin the video to the Spotify embed's fixed
+	   352px so the grid row is even — otherwise the shorter 16:9 video leaves a
+	   gap beneath it. Stacked on narrow screens, the video keeps its 16:9 ratio. */
+	@media (min-width: 700px) {
+		.player-video {
+			aspect-ratio: auto;
+			height: 352px;
+		}
+	}
 	.releases {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -561,14 +541,6 @@
 	.tracklist li::marker {
 		color: var(--lime);
 		font-variant-numeric: tabular-nums;
-	}
-
-	/* keyboard accessibility */
-	.btn:focus-visible,
-	.chip:focus-visible {
-		outline: 2px solid var(--cyan);
-		outline-offset: 3px;
-		border-radius: 6px;
 	}
 
 	/* ---------- RESPONSIVE ---------- */
