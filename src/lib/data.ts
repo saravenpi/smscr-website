@@ -251,7 +251,14 @@ export const links: Link[] = [
 	{ label: 'YouTube', url: 'https://www.youtube.com/@SuperMegaSuperCoolRevolution' }
 ];
 
-export const awards = ['Lauréats Un Doua Jazz 2024', 'Accompagnement Ninkasi Music Lab'];
+// Wins/selections shown as distinction pills; awards[0] also appears in the hero
+// eyebrow, so keep the strongest first. Also fed to schema.org `award` (JSON-LD).
+export const awards = [
+	'Lauréats Un Doua Jazz 2024',
+	'Lauréats BIJ',
+	'Accompagnement Ninkasi Music Lab',
+	'Sélection Tremplin JazzContreBand 2025'
+];
 
 // Downloadable pro documents (press kit, and later the technical rider). Files
 // live in static/ and are served from the site root — prefix `file` with `base`
