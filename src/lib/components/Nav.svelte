@@ -15,6 +15,7 @@
 		{ href: `${base}/#musique`, label: 'Musique' },
 		{ href: `${base}/#live`, label: 'Live' },
 		{ href: `${base}/dates`, label: 'Dates' },
+		{ href: `${base}/#presse`, label: 'Presse' },
 		{ href: `${base}/#contact`, label: 'Contact' }
 	];
 
@@ -161,7 +162,7 @@
 		border-radius: 6px;
 	}
 
-	@media (max-width: 820px) {
+	@media (max-width: 900px) {
 		.nav-toggle {
 			display: inline-flex;
 		}

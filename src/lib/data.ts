@@ -252,3 +252,32 @@ export const links: Link[] = [
 ];
 
 export const awards = ['Lauréats Un Doua Jazz 2024', 'Accompagnement Ninkasi Music Lab'];
+
+// Downloadable pro documents (press kit, and later the technical rider). Files
+// live in static/ and are served from the site root — prefix `file` with `base`
+// in markup. Best practice: keep the press kit (for journalists/programmers) and
+// the fiche technique (for venue sound/light crews) as SEPARATE downloads.
+export type PressDoc = {
+	title: string;
+	desc: string;
+	file: string; // root-relative path under static/
+	downloadAs: string; // ASCII-safe filename suggested to the browser
+	meta: string; // format · date · size
+};
+
+export const pressDocs: PressDoc[] = [
+	{
+		title: 'Dossier de presse',
+		desc: 'Bio, visuels, discographie, concerts & résidences, revue de presse et contacts.',
+		file: '/smscr-dossier-de-presse.pdf',
+		downloadAs: 'SMSCR-Dossier-de-presse-Fevrier-2026.pdf',
+		meta: 'PDF · Février 2026 · 1,6 Mo'
+	},
+	{
+		title: 'Fiche technique',
+		desc: 'Plan de scène, patch et besoins backline & retours pour les régies.',
+		file: '/smscr-fiche-technique.pdf',
+		downloadAs: 'SMSCR-Fiche-technique.pdf',
+		meta: 'PDF · 1,1 Mo'
+	}
+];

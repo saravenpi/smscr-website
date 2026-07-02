@@ -7,7 +7,17 @@
 	import { reveal } from '$lib/reveal';
 	import { magnetic } from '$lib/magnetic';
 	import bandPhoto from '$lib/assets/band.jpg';
-	import { band, members, releases, shows, links, awards, featuredVideoId } from '$lib/data';
+	import {
+		band,
+		members,
+		releases,
+		shows,
+		links,
+		awards,
+		featuredVideoId,
+		pressDocs,
+		contactEmail
+	} from '$lib/data';
 	import Play from '@lucide/svelte/icons/play';
 	import CalendarDays from '@lucide/svelte/icons/calendar-days';
 	import Disc3 from '@lucide/svelte/icons/disc-3';
@@ -15,6 +25,9 @@
 	import Users from '@lucide/svelte/icons/users';
 	import Sparkles from '@lucide/svelte/icons/sparkles';
 	import Award from '@lucide/svelte/icons/award';
+	import Download from '@lucide/svelte/icons/download';
+	import FileText from '@lucide/svelte/icons/file-text';
+	import Mail from '@lucide/svelte/icons/mail';
 
 	// rotating accent per member so the line-up reads like art, not a roster
 	const accents = ['var(--magenta)', 'var(--cyan)', 'var(--lime)', 'var(--orange)', 'var(--purple)'];
@@ -223,6 +236,50 @@
 			<h2 class="section-title">Live</h2>
 		</div>
 		<Shows {shows} pastLimit={4} moreHref="{base}/dates" />
+	</div>
+</section>
+
+<!-- PRESSE & BOOKING -->
+<section id="presse" class="press-section">
+	<div class="wrap">
+		<div class="reveal" use:reveal>
+			<p class="eyebrow"><FileText size={13} />Espace pro</p>
+			<h2 class="section-title">Presse &amp; booking</h2>
+			<p class="press-lead">
+				Programmateur·rice ou journaliste&nbsp;? Le dossier de presse réunit bio, visuels,
+				discographie, concerts et revue de presse — tout ce qu'il faut pour parler du groupe et le
+				programmer.
+			</p>
+		</div>
+		<div class="press-grid">
+			{#each pressDocs as doc, i (doc.file)}
+				<a
+					class="press-card reveal"
+					use:reveal={{ delay: i * 90 }}
+					href="{base}{doc.file}"
+					download={doc.downloadAs}
+				>
+					<span class="press-icon"><Download size={22} strokeWidth={2.25} /></span>
+					<span class="press-text">
+						<span class="press-title">{doc.title}</span>
+						<span class="press-desc">{doc.desc}</span>
+						<span class="press-meta">{doc.meta}</span>
+					</span>
+				</a>
+			{/each}
+			<a
+				class="press-card press-contact reveal"
+				use:reveal={{ delay: pressDocs.length * 90 }}
+				href="mailto:{contactEmail}?subject=Booking%20SMSCR"
+			>
+				<span class="press-icon"><Mail size={22} strokeWidth={2.25} /></span>
+				<span class="press-text">
+					<span class="press-title">Booking</span>
+					<span class="press-desc">Une date, une prog, une interview&nbsp;? Écrivez-nous.</span>
+					<span class="press-meta">{contactEmail}</span>
+				</span>
+			</a>
+		</div>
 	</div>
 </section>
 
@@ -541,6 +598,85 @@
 	.tracklist li::marker {
 		color: var(--lime);
 		font-variant-numeric: tabular-nums;
+	}
+
+	/* ---------- PRESSE & BOOKING ---------- */
+	.press-lead {
+		max-width: 60ch;
+		color: var(--ink-dim);
+		font-size: 1.1rem;
+		margin: 0 0 2.4rem;
+	}
+	.press-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 1.5rem;
+	}
+	.press-card {
+		display: flex;
+		align-items: center;
+		gap: 1.1rem;
+		padding: clamp(1.3rem, 3vw, 1.8rem);
+		border: 1px solid rgba(246, 241, 255, 0.16);
+		border-radius: var(--radius);
+		background: linear-gradient(160deg, rgba(139, 47, 255, 0.14), rgba(10, 4, 16, 0.2));
+		text-decoration: none;
+		color: var(--ink);
+		transition:
+			transform 0.25s var(--ease),
+			border-color 0.25s var(--ease);
+	}
+	.press-card:hover {
+		transform: translateY(-4px);
+		border-color: rgba(255, 46, 136, 0.5);
+	}
+	.press-card:focus-visible {
+		outline: 2px solid var(--cyan);
+		outline-offset: 3px;
+	}
+	.press-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: 52px;
+		height: 52px;
+		border-radius: 14px;
+		background: var(--magenta);
+		color: #0a0410;
+		transition: transform 0.25s var(--ease);
+	}
+	.press-contact .press-icon {
+		background: var(--lime);
+	}
+	.press-card:hover .press-icon {
+		transform: translateY(-2px) rotate(-4deg);
+	}
+	.press-text {
+		display: flex;
+		flex-direction: column;
+		gap: 0.22rem;
+		min-width: 0;
+	}
+	.press-title {
+		font-family: var(--display);
+		font-weight: 700;
+		font-size: 1.2rem;
+	}
+	.press-desc {
+		color: var(--ink-dim);
+		font-size: 0.95rem;
+		line-height: 1.4;
+	}
+	.press-meta {
+		margin-top: 0.15rem;
+		font-size: 0.78rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--cyan);
+		/* long email must not overflow the card */
+		overflow-wrap: anywhere;
 	}
 
 	/* ---------- RESPONSIVE ---------- */
