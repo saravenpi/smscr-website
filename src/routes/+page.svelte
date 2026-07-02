@@ -14,6 +14,7 @@
 		shows,
 		links,
 		awards,
+		heroAward,
 		featuredVideoId,
 		pressDocs,
 		contactEmail,
@@ -135,7 +136,7 @@
 <section id="top" class="hero" tabindex="-1">
 	<div class="wrap hero-inner">
 		<p class="eyebrow hero-anim" style="--hero-delay:0ms">
-			<MapPin size={13} />{band.city} · {awards[0]}
+			<MapPin size={13} />{band.city} · {heroAward}
 		</p>
 		<h1 class="hero-title">
 			<span class="hline">
@@ -186,9 +187,9 @@
 		</div>
 		<div class="about-body reveal" use:reveal={{ delay: 120 }}>
 			<p>
-				Né d'un trio trompette / basse / guitare, le combo s'est mué en quintette électrique
-				avec l'arrivée d'un batteur biberonné à la drum & bass et d'un claviériste féru de
-				synthèse analogique. Ensemble, ils inventent une musique qui refuse de choisir son camp.
+				Un quintette électrique biberonné à la drum & bass et à la synthèse analogique, où
+				trompette, guitare, basse, batterie et claviers inventent ensemble une musique qui
+				refuse de choisir son camp.
 			</p>
 			<p>
 				Entre funk-fusion des seventies, musique électronique et punk rock, SMSCR balance

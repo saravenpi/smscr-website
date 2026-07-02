@@ -12,6 +12,7 @@
 	import { dev } from '$app/environment';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import favicon from '$lib/assets/favicon.svg';
+	import ArrowUp from '@lucide/svelte/icons/arrow-up';
 	import {
 		band,
 		members,
@@ -145,6 +146,19 @@
 			cancelAnimationFrame(raf);
 		};
 	});
+
+	// back-to-top button: show after scrolling down, smooth-scroll to top
+	let showTop = $state(false);
+	onMount(() => {
+		const onScroll = () => (showTop = window.scrollY > 500);
+		onScroll();
+		window.addEventListener('scroll', onScroll, { passive: true });
+		return () => window.removeEventListener('scroll', onScroll);
+	});
+	function scrollToTop() {
+		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+	}
 </script>
 
 <svelte:head>
@@ -186,3 +200,61 @@
 <div class="grain" aria-hidden="true"></div>
 
 {@render children()}
+
+<button
+	class="to-top"
+	class:show={showTop}
+	type="button"
+	onclick={scrollToTop}
+	aria-label="Remonter en haut de la page"
+>
+	<ArrowUp size={22} strokeWidth={2.5} />
+</button>
+
+<style>
+	.to-top {
+		position: fixed;
+		bottom: clamp(1rem, 3vw, 2rem);
+		right: clamp(1rem, 3vw, 2rem);
+		z-index: 45;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 48px;
+		height: 48px;
+		border-radius: 999px;
+		border: 1px solid rgba(246, 241, 255, 0.25);
+		background: rgba(10, 4, 16, 0.6);
+		backdrop-filter: blur(10px);
+		color: var(--ink);
+		cursor: pointer;
+		opacity: 0;
+		transform: translateY(12px);
+		pointer-events: none;
+		transition:
+			opacity 0.3s var(--ease),
+			transform 0.3s var(--ease),
+			background 0.2s var(--ease),
+			border-color 0.2s var(--ease);
+	}
+	.to-top.show {
+		opacity: 1;
+		transform: none;
+		pointer-events: auto;
+	}
+	.to-top:hover {
+		background: var(--magenta);
+		border-color: var(--magenta);
+		color: #0a0410;
+	}
+	.to-top:focus-visible {
+		outline: 2px solid var(--cyan);
+		outline-offset: 3px;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.to-top {
+			transition: opacity 0.3s var(--ease);
+			transform: none;
+		}
+	}
+</style>

@@ -54,7 +54,6 @@
 				<span class="show-date">{s.label}</span>
 				<span class="show-venue">{s.venue}</span>
 				<span class="show-city"><MapPin size={13} />{s.city}</span>
-				<span class="show-tag past">Archivé</span>
 			</li>
 		{/each}
 	</ul>
@@ -121,11 +120,6 @@
 		background: var(--lime);
 		color: #0a0410;
 		white-space: nowrap;
-	}
-	.show-tag.past {
-		background: transparent;
-		border: 1px solid rgba(246, 241, 255, 0.3);
-		color: var(--ink-dim);
 	}
 	.shows-more {
 		display: inline-flex;

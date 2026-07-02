@@ -4,6 +4,10 @@
 // Release artwork, extracted from the album files and optimised for the web.
 import inspektherCover from './assets/covers/inspekther.jpg';
 import alaiseCover from './assets/covers/alaise.jpg';
+import fullShineRenderCover from './assets/covers/full-shine-render.jpg';
+import laFangabinadeCover from './assets/covers/la-fangabinade.jpg';
+import laFangratitudeCover from './assets/covers/la-fangratitude.jpg';
+import westernVilleurbanneCover from './assets/covers/western-villeurbanne.jpg';
 
 // Canonical site origin (no trailing slash) — used for SEO absolute URLs.
 export const siteUrl = 'https://smscr.fr';
@@ -50,7 +54,7 @@ export const members: Member[] = [
 	{
 		name: 'Mr. Meon',
 		role: 'Trompette',
-		blurb: 'Les mélodies cuivrées qui percent le mur du son. Membre du trio fondateur.'
+		blurb: 'Les mélodies cuivrées qui percent le mur du son.'
 	},
 	{
 		name: 'Gabin',
@@ -60,7 +64,7 @@ export const members: Member[] = [
 	{
 		name: 'Timéo',
 		role: 'Basse',
-		blurb: 'La colonne vertébrale groove du groupe, du trio des origines à aujourd’hui.'
+		blurb: 'La colonne vertébrale groove du groupe.'
 	},
 	{
 		name: 'Fanga',
@@ -112,6 +116,34 @@ export const releases: Release[] = [
 			'Full Speed Render'
 		],
 		link: 'https://supermegasupercoolrevolution.bandcamp.com/album/laise-avec-supermegasupercool-r-volution'
+	},
+	{
+		title: 'Western Villeurbanne in memoriam Pizza 51',
+		type: 'Single',
+		year: '2024',
+		cover: westernVilleurbanneCover,
+		link: 'https://supermegasupercoolrevolution.bandcamp.com/track/western-villeurbanne-in-memoriam-pizza-51'
+	},
+	{
+		title: 'La Fangratitude',
+		type: 'Single',
+		year: '2024',
+		cover: laFangratitudeCover,
+		link: 'https://supermegasupercoolrevolution.bandcamp.com/track/la-fangratitude'
+	},
+	{
+		title: 'La Fangabinade',
+		type: 'Single',
+		year: '2024',
+		cover: laFangabinadeCover,
+		link: 'https://supermegasupercoolrevolution.bandcamp.com/track/la-fangabinade'
+	},
+	{
+		title: 'Full Shine Render',
+		type: 'Single',
+		year: '2023',
+		cover: fullShineRenderCover,
+		link: 'https://supermegasupercoolrevolution.bandcamp.com/track/full-shine-render'
 	}
 ];
 
@@ -205,10 +237,14 @@ export const links: Link[] = [
 // eyebrow, so keep the strongest first. Also fed to schema.org `award` (JSON-LD).
 export const awards = [
 	'Sélection Tremplin JazzContreBand 2025',
-	'Accompagnement Ninkasi Music Lab',
+	'Accompagnement Ninkasi Music Lab (promo 2025-2027)',
 	'Lauréats Un Doua Jazz 2024',
 	'Lauréats Bourse d’Initiative Jeunes — BIJ Villeurbanne'
 ];
+
+// Single headline credential for the hero eyebrow — the strongest *win*, kept
+// independent of the (newest-first) `awards` order used for the distinction pills.
+export const heroAward = 'Lauréats Un Doua Jazz 2024';
 
 // Downloadable pro documents (press kit, and later the technical rider). Files
 // live in static/ and are served from the site root — prefix `file` with `base`
