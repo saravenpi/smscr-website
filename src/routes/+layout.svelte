@@ -1,5 +1,13 @@
 <script lang="ts">
 	import '../app.css';
+	// Self-hosted fonts (no third-party request, no FOUT from Google Fonts).
+	// Weights match app.css: Syne 600/700/800 (display), Space Grotesk 400/500/700 (body).
+	import '@fontsource/syne/600.css';
+	import '@fontsource/syne/700.css';
+	import '@fontsource/syne/800.css';
+	import '@fontsource/space-grotesk/400.css';
+	import '@fontsource/space-grotesk/500.css';
+	import '@fontsource/space-grotesk/700.css';
 	import { onMount } from 'svelte';
 	import { dev } from '$app/environment';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
@@ -60,16 +68,26 @@
 	};
 
 	// One MusicEvent per gig so Google can surface them as event rich results.
+	// `offers` (even minimal) and `endDate` for multi-day gigs are what Google
+	// needs to render the event rich result — we only assert what we actually know
+	// (a link + availability; price 0 for free gigs), never a fabricated price.
 	const eventNodes = shows.map((s) => ({
 		'@type': 'MusicEvent',
 		name: `${band.name} · ${s.venue}`,
 		startDate: s.date,
+		...(s.endDate ? { endDate: s.endDate } : {}),
 		eventStatus: 'https://schema.org/EventScheduled',
 		eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
 		location: { '@type': 'Place', name: s.venue, address: s.city },
 		performer: { '@id': bandId },
 		url: s.link ?? canonical,
-		...(s.free ? { isAccessibleForFree: true } : {})
+		...(s.free ? { isAccessibleForFree: true } : {}),
+		offers: {
+			'@type': 'Offer',
+			url: s.link ?? canonical,
+			availability: 'https://schema.org/InStock',
+			...(s.free ? { price: '0', priceCurrency: 'EUR' } : {})
+		}
 	}));
 
 	const jsonLd = JSON.stringify({

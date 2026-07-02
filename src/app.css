@@ -28,6 +28,8 @@
 html {
 	scroll-behavior: smooth;
 	scroll-padding-top: 84px;
+	/* viewport-level horizontal clipping (works with the sticky nav, unlike
+	   overflow:hidden); catches any element that would otherwise overflow width */
 	overflow-x: clip;
 }
 
@@ -38,7 +40,6 @@ body {
 	font-family: var(--body);
 	font-size: 18px;
 	line-height: 1.6;
-	overflow-x: clip;
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -203,7 +204,7 @@ section {
 	font-weight: 800;
 	margin: 0 0 1.4rem;
 	/* long words like « révolutionnaires » must wrap/hyphenate on narrow screens
-	   instead of overflowing (body has overflow-x: clip, so they'd get cut off) */
+	   instead of overflowing (html has overflow-x: clip, so they'd get cut off) */
 	overflow-wrap: break-word;
 	hyphens: auto;
 }
@@ -225,8 +226,9 @@ section {
 }
 
 /* ---------- hero entrance ---------- */
+/* transform-only (no opacity fade): the hero title is the LCP element, so it must
+   paint at full opacity immediately — it slides up rather than fading in. */
 .js .hero-anim {
-	opacity: 0;
 	transform: translateY(38px);
 	animation: heroUp 0.9s var(--ease) forwards;
 	animation-delay: var(--hero-delay, 0ms);
@@ -234,7 +236,6 @@ section {
 
 @keyframes heroUp {
 	to {
-		opacity: 1;
 		transform: none;
 	}
 }

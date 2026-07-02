@@ -29,8 +29,7 @@ export const band = {
 };
 
 export type Member = {
-	name: string;
-	nick?: string;
+	name: string; // stage name / pseudo shown on the site
 	role: string;
 	blurb: string;
 };
@@ -105,7 +104,8 @@ export const releases: Release[] = [
 ];
 
 export type Show = {
-	date: string; // ISO
+	date: string; // ISO (start date)
+	endDate?: string; // ISO end date for multi-day gigs (festivals)
 	label: string; // human-readable date
 	venue: string;
 	city: string;
@@ -195,6 +195,7 @@ export const shows: Show[] = [
 	},
 	{
 		date: '2026-05-21',
+		endDate: '2026-05-22',
 		label: '21–22 mai 2026',
 		venue: 'FIMU',
 		city: 'Belfort (90)',
@@ -234,7 +235,7 @@ export type Link = { label: string; url: string };
 export const links: Link[] = [
 	{ label: 'Bandcamp', url: 'https://supermegasupercoolrevolution.bandcamp.com' },
 	{ label: 'Spotify', url: 'https://open.spotify.com/artist/1X1vH2wpLqAl3v2O16WQGu' },
-	{ label: 'Deezer', url: 'https://www.deezer.com/en/artist/221241275' },
+	{ label: 'Deezer', url: 'https://www.deezer.com/artist/221241275' },
 	{ label: 'Instagram', url: 'https://www.instagram.com/supermegasupercoolrevolution/' },
 	{ label: 'YouTube', url: 'https://www.youtube.com/watch?v=-Pk-eKO_yDA' }
 ];

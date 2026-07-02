@@ -19,9 +19,21 @@
 	];
 
 	let menuOpen = $state(false);
+	let headerEl: HTMLElement;
+
+	// Close the mobile menu on Escape or a click/tap outside the header
+	// (WAI-ARIA disclosure pattern: dismissible, not a focus-trapped modal).
+	function onKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape' && menuOpen) menuOpen = false;
+	}
+	function onOutsidePointer(e: PointerEvent) {
+		if (menuOpen && headerEl && !headerEl.contains(e.target as Node)) menuOpen = false;
+	}
 </script>
 
-<header class="nav">
+<svelte:window onkeydown={onKeydown} onpointerdown={onOutsidePointer} />
+
+<header class="nav" bind:this={headerEl}>
 	<div class="wrap nav-inner">
 		<a class="brand" href="{base}/" onclick={() => (menuOpen = false)}>SMSCR</a>
 		<nav id="primary-nav" class="nav-links" class:open={menuOpen} aria-label="Navigation principale">

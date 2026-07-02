@@ -76,7 +76,7 @@
 			<p>
 				Né d'un trio trompette / basse / guitare, le combo s'est mué en quintette électrique
 				avec l'arrivée d'un batteur biberonné à la drum & bass et d'un claviériste féru de
-				synthèse analogique. Ensemble, ils peignent des univers sonores encore inexistants.
+				synthèse analogique. Ensemble, ils inventent une musique qui refuse de choisir son camp.
 			</p>
 			<p>
 				Entre funk-fusion des seventies, musique électronique et punk rock, SMSCR balance
@@ -131,9 +131,7 @@
 					style="--c:{accents[i % accents.length]}"
 				>
 					<span class="member-role">{m.role}</span>
-					<h3 class="member-name">
-						{m.name}{#if m.nick}<span class="member-nick">“{m.nick}”</span>{/if}
-					</h3>
+					<h3 class="member-name">{m.name}</h3>
 					<p class="member-blurb">{m.blurb}</p>
 				</article>
 			{/each}
@@ -449,16 +447,6 @@
 		letter-spacing: -0.03em;
 		color: var(--c);
 		margin: 0 0 0.7rem;
-	}
-	.member-nick {
-		font-family: var(--body);
-		font-size: clamp(0.85rem, 1.6vw, 1.05rem);
-		color: var(--ink-dim);
-		font-weight: 500;
-		text-transform: none;
-		letter-spacing: 0;
-		vertical-align: middle;
-		margin-left: 0.4em;
 	}
 	.member-blurb {
 		margin: 0;
