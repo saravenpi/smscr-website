@@ -1,6 +1,6 @@
 # SuperMegaSuperCool Révolution — site officiel
 
-Site officiel (fan-made) du groupe **SuperMegaSuperCool Révolution** (SMSCR),
+Site officiel du groupe **SuperMegaSuperCool Révolution** (SMSCR),
 quintette de jazz psychédélique / prog-fusion basé à **Lyon**.
 
 > *L'abolition des frontières esthétiques.*
@@ -46,5 +46,4 @@ Le domaine canonique est `https://smscr.fr` (défini par `siteUrl` dans
 
 ---
 
-Contenu compilé à partir des pages publiques du groupe (Bandcamp, Nébuleuse Sonore,
-Spotify, Deezer). Site non officiel réalisé par un fan.
+Site officiel du groupe, maintenu par le groupe.
