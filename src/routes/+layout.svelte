@@ -36,7 +36,7 @@
 		image: ogImage,
 		genre: ['Jazz', 'Progressive fusion', 'Jazz psychédélique', 'Funk', 'Punk'],
 		foundingLocation: { '@type': 'Place', name: band.city },
-		award: awards[0],
+		award: awards,
 		member: members.map((m) => ({ '@type': 'Person', name: m.name })),
 		sameAs: links.map((l) => l.url),
 		album: releases.map((r) => ({

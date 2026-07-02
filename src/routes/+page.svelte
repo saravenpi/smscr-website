@@ -176,6 +176,10 @@
 				<span class="influences-label">Dans le rétro&nbsp;:</span>
 				{#each band.influences as inf (inf)}<span class="chip">{inf}</span>{/each}
 			</div>
+			<div class="influences">
+				<span class="influences-label">Distinctions&nbsp;:</span>
+				{#each awards as a (a)}<span class="chip">{a}</span>{/each}
+			</div>
 		</div>
 	</div>
 

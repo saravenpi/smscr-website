@@ -186,7 +186,8 @@ export const shows: Show[] = [
 		date: '2026-05-24',
 		label: '24 mai 2026',
 		venue: "24h de l'INSA",
-		city: 'Villeurbanne (69)'
+		city: 'Villeurbanne (69)',
+		free: true
 	},
 	{
 		date: '2026-07-11',
@@ -213,4 +214,4 @@ export const links: Link[] = [
 	{ label: 'YouTube', url: 'https://www.youtube.com/watch?v=-Pk-eKO_yDA' }
 ];
 
-export const awards = ['Lauréats Un Doua Jazz 2024'];
+export const awards = ['Lauréats Un Doua Jazz 2024', 'Accompagnement Ninkasi Music Lab'];
