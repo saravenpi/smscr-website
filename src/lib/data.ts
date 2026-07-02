@@ -215,7 +215,7 @@ export const shows: Show[] = [
 	{ date: '2026-05-21', endDate: '2026-05-22', label: '21–22 mai 2026', venue: 'FIMU', city: 'Belfort (90)', free: true },
 	{ date: '2026-05-24', label: '24 mai 2026', venue: '24h de l’INSA', city: 'Villeurbanne (69)', free: true },
 	{ date: '2026-06-06', label: '6 juin 2026', venue: 'Festiv’UT', city: 'Belfort (90)' },
-	{ date: '2026-07-11', label: '11 juillet 2026', venue: 'Jazz à Vienne', city: 'Vienne (38)', free: true },
+	{ date: '2026-07-11', label: '11 juillet 2026', venue: 'Jazz à Vienne (scène Cybèle)', city: 'Vienne (38)', free: true },
 	{ date: '2026-07-17', label: '17 juillet 2026', venue: 'Le 648 Café', city: 'Marcellaz (74)' },
 	{ date: '2026-07-18', endDate: '2026-07-19', label: '18–19 juillet 2026', venue: 'La Grange Merveilleuse', city: 'La Chapelle-Naude (71)' },
 	{ date: '2026-07-22', label: '22 juillet 2026', venue: 'La Pente', city: 'Lyon (69)' },

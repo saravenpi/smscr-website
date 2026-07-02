@@ -36,7 +36,7 @@
 	import X from '@lucide/svelte/icons/x';
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
-	import heroPhoto from '$lib/assets/photos/hero.jpg';
+	import laundromatPhoto from '$lib/assets/photos/band-laundromat.jpg';
 	import gal01 from '$lib/assets/photos/gal-01.jpg';
 	import gal02 from '$lib/assets/photos/gal-02.jpg';
 	import gal03 from '$lib/assets/photos/gal-03.jpg';
@@ -66,7 +66,7 @@
 		{ src: gal01, w: 1400, h: 934, credit: 'Grrrnd Zéro', alt: 'Les cinq membres de SMSCR passent la tête derrière le bar du Grrrnd Zéro' },
 		{ src: gal02, w: 1080, h: 1080, credit: 'Mathieu Courtin', alt: 'SuperMegaSuperCool Révolution au complet sur scène' },
 		{ src: gal03, w: 933, h: 1400, credit: '', alt: 'Silhouettes du groupe dans une lumière orange psychédélique' },
-		{ src: gal04, w: 1400, h: 933, credit: 'Kim Kimstoical', alt: 'Le groupe posé sur un mur d’amplis' },
+		{ src: gal04, w: 1400, h: 1120, credit: 'Gilles Vugliano / Kim Kimstoical', alt: 'Les cinq membres de SMSCR en imperméables de détective' },
 		{ src: gal05, w: 1400, h: 933, credit: '', alt: 'Le trompettiste de SMSCR chante au micro en concert' },
 		{ src: gal06, w: 1400, h: 933, credit: 'Kim Kimstoical', alt: 'Deux membres du groupe cachés dans la végétation' },
 		{ src: gal07, w: 1400, h: 933, credit: 'Kim Kimstoical', alt: 'Le guitariste de SMSCR sous une lumière rouge' },
@@ -210,15 +210,17 @@
 	</div>
 
 	<div class="wrap">
-		<img
-			class="band-photo reveal"
-			use:reveal
-			src={heroPhoto}
-			alt="Les cinq membres de SuperMegaSuperCool Révolution en imperméables de détective"
-			width="2000"
-			height="1600"
-			loading="lazy"
-		/>
+		<figure class="band-fig reveal" use:reveal>
+			<img
+				class="band-photo"
+				src={laundromatPhoto}
+				alt="Les cinq membres de SuperMegaSuperCool Révolution assis sur les machines d’une laverie"
+				width="2000"
+				height="1333"
+				loading="lazy"
+			/>
+			<figcaption class="band-credit">© Kim Kimstoical</figcaption>
+		</figure>
 	</div>
 
 	<div class="wrap">
@@ -607,13 +609,22 @@
 	}
 
 	/* ---------- BAND PHOTO ---------- */
+	.band-fig {
+		margin: clamp(1rem, 3vw, 2.5rem) 0 clamp(2.5rem, 6vw, 5rem);
+	}
 	.band-photo {
 		display: block;
 		width: 100%;
 		height: auto;
 		border-radius: var(--radius);
 		border: 1px solid rgba(246, 241, 255, 0.14);
-		margin: clamp(1rem, 3vw, 2.5rem) 0 clamp(2.5rem, 6vw, 5rem);
+	}
+	.band-credit {
+		margin: 0.5rem 0 0;
+		text-align: right;
+		color: var(--ink-dim);
+		font-size: 0.78rem;
+		letter-spacing: 0.03em;
 	}
 
 	/* ---------- MANIFESTO ---------- */
