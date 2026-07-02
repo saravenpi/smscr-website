@@ -116,6 +116,24 @@ export type Show = {
 // Ordered chronologically. `date` used to split upcoming vs. past.
 export const shows: Show[] = [
 	{
+		date: '2024-04-30',
+		label: '30 avril 2024',
+		venue: 'Le Heat',
+		city: 'Lyon (69)'
+	},
+	{
+		date: '2024-10-11',
+		label: '11 octobre 2024',
+		venue: 'Le Périscope',
+		city: 'Lyon (69)'
+	},
+	{
+		date: '2024-12-04',
+		label: '4 décembre 2024',
+		venue: 'Le Brin de Zinc',
+		city: 'Barberaz (73)'
+	},
+	{
 		date: '2026-01-15',
 		label: '15 janvier 2026',
 		venue: 'L’Ampérage',
@@ -201,6 +219,13 @@ export const shows: Show[] = [
 		label: '17 juillet 2026',
 		venue: 'La Grange Merveilleuse',
 		city: 'La Chapelle-Naude (71)'
+	},
+	{
+		date: '2026-07-31',
+		label: '31 juillet 2026',
+		venue: 'La Poule à Facettes',
+		city: 'Piégros-la-Clastre (26)',
+		free: true
 	}
 ];
 
