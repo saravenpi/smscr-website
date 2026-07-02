@@ -181,7 +181,7 @@ export const shows: Show[] = [
 	{ date: '2026-03-27', label: '27 mars 2026', venue: 'L’Aparté', city: 'Roanne (42)' },
 	{ date: '2026-03-28', label: '28 mars 2026', venue: 'La Grange des Hauts', city: 'Sourcieux-les-Mines (69)' },
 	{ date: '2026-04-02', label: '2 avril 2026', venue: 'Le Cirque Électrique', city: 'Paris (75)' },
-	{ date: '2026-04-03', label: '3 avril 2026', venue: 'Le Bal Chavaux', city: 'Montreuil (93)' },
+	{ date: '2026-04-03', label: '3 avril 2026', venue: 'La Marbrerie', city: 'Montreuil (93)' },
 	{ date: '2026-05-21', endDate: '2026-05-22', label: '21–22 mai 2026', venue: 'FIMU', city: 'Belfort (90)', free: true },
 	{ date: '2026-05-24', label: '24 mai 2026', venue: '24h de l’INSA', city: 'Villeurbanne (69)', free: true },
 	{ date: '2026-06-06', label: '6 juin 2026', venue: 'Festiv’UT', city: 'Belfort (90)' },
