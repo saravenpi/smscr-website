@@ -126,119 +126,66 @@ export type Show = {
 
 // Ordered chronologically. `date` used to split upcoming vs. past.
 export const shows: Show[] = [
-	{
-		date: '2024-04-30',
-		label: '30 avril 2024',
-		venue: 'Le Heat',
-		city: 'Lyon (69)'
-	},
-	{
-		date: '2024-10-11',
-		label: '11 octobre 2024',
-		venue: 'Le Périscope',
-		city: 'Lyon (69)'
-	},
-	{
-		date: '2024-12-04',
-		label: '4 décembre 2024',
-		venue: 'Le Brin de Zinc',
-		city: 'Barberaz (73)'
-	},
-	{
-		date: '2026-01-15',
-		label: '15 janvier 2026',
-		venue: 'L’Ampérage',
-		city: 'Grenoble (38)'
-	},
-	{
-		date: '2026-01-17',
-		label: '17 janvier 2026',
-		venue: 'Le 648 Café',
-		city: 'Marcellaz (74)'
-	},
-	{
-		date: '2026-01-18',
-		label: '18 janvier 2026',
-		venue: 'Le Brin de Zinc',
-		city: 'Barberaz (73)'
-	},
-	{
-		date: '2026-01-21',
-		label: '21 janvier 2026',
-		venue: 'Ninkasi Cordeliers',
-		city: 'Lyon (69)'
-	},
-	{
-		date: '2026-02-02',
-		label: '2 février 2026',
-		venue: 'Saint-Fons Jazz Festival',
-		city: 'Saint-Fons (69)'
-	},
-	{
-		date: '2026-02-10',
-		label: '10 février 2026',
-		venue: 'Le Périscope',
-		city: 'Lyon (69)'
-	},
-	{
-		date: '2026-03-27',
-		label: '27 mars 2026',
-		venue: 'L’Aparté',
-		city: 'Roanne (42)'
-	},
-	{
-		date: '2026-03-28',
-		label: '28 mars 2026',
-		venue: 'La Grange des Hauts',
-		city: 'Sourcieux-les-Mines (69)'
-	},
-	{
-		date: '2026-04-02',
-		label: '2 avril 2026',
-		venue: 'Le Cirque Électrique',
-		city: 'Paris (75)'
-	},
-	{
-		date: '2026-04-03',
-		label: '3 avril 2026',
-		venue: 'La Marbrerie',
-		city: 'Montreuil (93)'
-	},
-	{
-		date: '2026-05-21',
-		endDate: '2026-05-22',
-		label: '21–22 mai 2026',
-		venue: 'FIMU',
-		city: 'Belfort (90)',
-		free: true
-	},
-	{
-		date: '2026-05-24',
-		label: '24 mai 2026',
-		venue: "24h de l'INSA",
-		city: 'Villeurbanne (69)',
-		free: true
-	},
-	{
-		date: '2026-07-11',
-		label: '11 juillet 2026',
-		venue: 'Jazz à Vienne',
-		city: 'Vienne (38)',
-		free: true
-	},
-	{
-		date: '2026-07-17',
-		label: '17 juillet 2026',
-		venue: 'La Grange Merveilleuse',
-		city: 'La Chapelle-Naude (71)'
-	},
-	{
-		date: '2026-07-31',
-		label: '31 juillet 2026',
-		venue: 'La Poule à Facettes',
-		city: 'Piégros-la-Clastre (26)',
-		free: true
-	}
+	{ date: '2023-02-03', label: '3 février 2023', venue: 'ENM', city: 'Villeurbanne (69)' },
+	{ date: '2023-04-22', label: '22 avril 2023', venue: 'Toï Toï le Zinc', city: 'Villeurbanne (69)' },
+	{ date: '2023-06-14', label: '14 juin 2023', venue: 'La Commune', city: 'Lyon (69)' },
+	{ date: '2023-10-14', label: '14 octobre 2023', venue: 'Taille Crayon', city: 'Villeurbanne (69)' },
+	{ date: '2023-10-23', label: '23 octobre 2023', venue: 'Café Galerie × Aziz Sound System', city: 'Lyon (69)' },
+	{ date: '2023-11-10', label: '10 novembre 2023', venue: 'Boulangerie du Prado', city: 'Lyon (69)' },
+	{ date: '2023-11-30', label: '30 novembre 2023', venue: 'Kraspek Myzik', city: 'Lyon (69)' },
+	{ date: '2023-12-18', endDate: '2023-12-19', label: '18–19 décembre 2023', venue: 'Le Périscope (résidence)', city: 'Lyon (69)' },
+	{ date: '2024-01-23', label: '23 janvier 2024', venue: 'Sirius', city: 'Lyon (69)' },
+	{ date: '2024-01-26', label: '26 janvier 2024', venue: 'Toï Toï le Zinc', city: 'Villeurbanne (69)' },
+	{ date: '2024-02-03', label: '3 février 2024', venue: 'Grrrnd Zéro', city: 'Vaulx-en-Velin (69)' },
+	{ date: '2024-03-01', label: '1er mars 2024', venue: 'Café Galerie', city: 'Lyon (69)' },
+	{ date: '2024-03-06', label: '6 mars 2024', venue: 'BIJ de Villeurbanne (tremplin scène émergence)', city: 'Villeurbanne (69)' },
+	{ date: '2024-03-09', label: '9 mars 2024', venue: 'Café Galerie × Aziz Sound System', city: 'Lyon (69)' },
+	{ date: '2024-03-16', label: '16 mars 2024', venue: 'Toï Toï le Zinc', city: 'Villeurbanne (69)' },
+	{ date: '2024-04-13', label: '13 avril 2024', venue: 'Bar des Capucins (jam session)', city: 'Lyon (69)' },
+	{ date: '2024-04-30', label: '30 avril 2024', venue: 'Le Heat (Jazz Day)', city: 'Lyon (69)' },
+	{ date: '2024-05-03', label: '3 mai 2024', venue: 'Tram 33', city: 'Lyon (69)' },
+	{ date: '2024-06-06', label: '6 juin 2024', venue: 'Clé de Voûte (tremplin Un Doua de Jazz)', city: 'Lyon (69)' },
+	{ date: '2024-06-08', label: '8 juin 2024', venue: 'Toï Toï le Zinc', city: 'Villeurbanne (69)' },
+	{ date: '2024-06-21', label: '21 juin 2024', venue: 'Festival des Invites', city: 'Villeurbanne (69)' },
+	{ date: '2024-07-06', label: '6 juillet 2024', venue: 'Vivez l’été', city: 'Villeurbanne (69)' },
+	{ date: '2024-09-14', label: '14 septembre 2024', venue: 'Girasol', city: 'Villeurbanne (69)' },
+	{ date: '2024-10-11', label: '11 octobre 2024', venue: 'Le Périscope (festival Un Doua de Jazz)', city: 'Lyon (69)' },
+	{ date: '2024-10-12', label: '12 octobre 2024', venue: 'Bar des Capucins', city: 'Lyon (69)' },
+	{ date: '2024-10-16', label: '16 octobre 2024', venue: 'Fabuleuse Cantine', city: 'Lyon (69)' },
+	{ date: '2024-11-01', label: '1er novembre 2024', venue: 'Babayaga', city: 'Chantelle (03)' },
+	{ date: '2024-11-16', label: '16 novembre 2024', venue: 'Festival des Dindes Folles', city: 'Rivolet (69)' },
+	{ date: '2024-12-03', label: '3 décembre 2024', venue: 'Ninkasi Cordeliers (release party)', city: 'Lyon (69)' },
+	{ date: '2024-12-04', label: '4 décembre 2024', venue: 'Le Brin de Zinc (release party)', city: 'Barberaz (73)' },
+	{ date: '2024-12-12', label: '12 décembre 2024', venue: 'Tremplin des 24h de l’INSA', city: 'Villeurbanne (69)' },
+	{ date: '2025-04-05', label: '5 avril 2025', venue: 'Bar des Capucins (jam MSF Palestine)', city: 'Lyon (69)' },
+	{ date: '2025-04-09', label: '9 avril 2025', venue: 'La Pente', city: 'Lyon (69)' },
+	{ date: '2025-04-11', label: '11 avril 2025', venue: 'Parvis de l’Amphithéâtre 3000', city: 'Lyon (69)' },
+	{ date: '2025-04-26', label: '26 avril 2025', venue: 'Live session INA', city: 'Île-de-France' },
+	{ date: '2025-04-30', label: '30 avril 2025', venue: 'Le Heat (Jazz Day)', city: 'Lyon (69)' },
+	{ date: '2025-05-02', label: '2 mai 2025', venue: 'Toï Toï le Zinc', city: 'Villeurbanne (69)' },
+	{ date: '2025-06-06', label: '6 juin 2025', venue: 'Marché Gare', city: 'Lyon (69)' },
+	{ date: '2025-06-14', label: '14 juin 2025', venue: 'Festival de l’Alternative', city: 'Rhône (69)' },
+	{ date: '2025-07-05', label: '5 juillet 2025', venue: 'Pelargo', city: 'Villeurbanne (69)' },
+	{ date: '2025-09-11', label: '11 septembre 2025', venue: 'Ninkasi Cordeliers', city: 'Lyon (69)' },
+	{ date: '2025-09-20', label: '20 septembre 2025', venue: 'Saint-Germain (Impasse du Merlot)', city: 'Saint-Germain (07)' },
+	{ date: '2025-10-17', endDate: '2025-10-18', label: '17–18 octobre 2025', venue: 'Carpe Diem', city: 'Arâches-la-Frasse (74)' },
+	{ date: '2025-10-19', label: '19 octobre 2025', venue: 'Tremplin JazzContreBand (eMA)', city: 'Genève (Suisse)' },
+	{ date: '2025-10-24', label: '24 octobre 2025', venue: 'Halle Hybride', city: 'Roanne (42)' },
+	{ date: '2025-11-18', endDate: '2025-11-19', label: '18–19 novembre 2025', venue: 'Les Abattoirs (résidence avec Benjamin Vaude)', city: 'Bourgoin-Jallieu (38)' },
+	{ date: '2026-01-15', label: '15 janvier 2026', venue: 'L’Ampérage', city: 'Grenoble (38)' },
+	{ date: '2026-01-16', label: '16 janvier 2026', venue: 'Le 648 Café', city: 'Marcellaz (74)' },
+	{ date: '2026-01-18', label: '18 janvier 2026', venue: 'Le Brin de Zinc', city: 'Barberaz (73)' },
+	{ date: '2026-02-10', label: '10 février 2026', venue: 'Le Périscope', city: 'Lyon (69)' },
+	{ date: '2026-04-03', label: '3 avril 2026', venue: 'Le Bal Chavaux', city: 'Montreuil (93)' },
+	{ date: '2026-05-21', endDate: '2026-05-22', label: '21–22 mai 2026', venue: 'FIMU', city: 'Belfort (90)', free: true },
+	{ date: '2026-05-24', label: '24 mai 2026', venue: '24h de l’INSA', city: 'Villeurbanne (69)', free: true },
+	{ date: '2026-06-06', label: '6 juin 2026', venue: 'Festiv’UT', city: 'Belfort (90)' },
+	{ date: '2026-07-11', label: '11 juillet 2026', venue: 'Jazz à Vienne', city: 'Vienne (38)', free: true },
+	{ date: '2026-07-17', label: '17 juillet 2026', venue: 'Le 648 Café', city: 'Marcellaz (74)' },
+	{ date: '2026-07-18', endDate: '2026-07-19', label: '18–19 juillet 2026', venue: 'La Grange Merveilleuse', city: 'La Chapelle-Naude (71)' },
+	{ date: '2026-07-22', label: '22 juillet 2026', venue: 'La Pente', city: 'Lyon (69)' },
+	{ date: '2026-07-30', label: '30 juillet 2026', venue: 'Nuits de la Poterie', city: 'Lhuis (01)' },
+	{ date: '2026-07-31', label: '31 juillet 2026', venue: 'La Poule à Facettes', city: 'Piégros-la-Clastre (26)', free: true },
 ];
 
 export type Link = { label: string; url: string };
